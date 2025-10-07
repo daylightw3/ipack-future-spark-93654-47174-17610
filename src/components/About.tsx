@@ -23,17 +23,17 @@ const About = () => {
   }, []);
 
   const stats = [
-    { icon: Package, value: "10B+", label: "Packs Sold", color: "text-primary" },
+    { icon: Package, value: "10B+", label: "Packs Sold by 2022", color: "text-primary" },
     { icon: TrendingUp, value: "80%", label: "Products Exported", color: "text-accent" },
-    { icon: Users, value: "160+", label: "Team Members", color: "text-primary" },
+    { icon: Users, value: "160+", label: "Expert Team Members", color: "text-primary" },
   ];
 
   const timeline = [
-    { year: "2016", event: "Ground Breaking" },
-    { year: "2017", event: "Production Started" },
-    { year: "2018", event: "ISO Certifications" },
-    { year: "2022", event: "10 Billion Packs Sold" },
-    { year: "2024", event: "MIITE Award Winner" },
+    { year: "2016", event: "Ground Breaking & Construction" },
+    { year: "2017", event: "Production Started - First Billion" },
+    { year: "2018", event: "International Certifications (ISO, BRC, FSC)" },
+    { year: "2022", event: "10 Billion Packs Milestone & PRIME Award Win" },
+    { year: "2024", event: "Continued Innovation in Industry 4.0" },
   ];
 
   return (
@@ -41,12 +41,19 @@ const About = () => {
       <div className="container mx-auto px-4 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16 animate-fade-in">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
+          <div className="inline-flex items-center gap-2 bg-primary/10 rounded-full px-6 py-2 mb-4">
+            <span className="text-primary font-semibold text-sm tracking-wide uppercase">
+              Our Story
+            </span>
+          </div>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-foreground">
             Pioneering Aseptic Packaging in the UAE
           </h2>
-          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            Since our establishment, ipack has been at the forefront of aseptic packaging innovation, 
-            delivering world-class solutions that combine cutting-edge technology with sustainable practices.
+          <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+            Since 2016, ipack has been at the forefront of aseptic packaging innovation, 
+            combining cutting-edge Industry 4.0 technology with sustainable practices. 
+            <span className="text-primary font-semibold"> Closer to You</span> - serving the food and 
+            beverage industry across the Middle East and beyond with excellence.
           </p>
         </div>
 

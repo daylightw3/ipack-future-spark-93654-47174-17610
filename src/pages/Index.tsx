@@ -4,6 +4,7 @@ import TrustedBy from "@/components/TrustedBy";
 import About from "@/components/About";
 import Products from "@/components/Products";
 import Technology from "@/components/Technology";
+import Awards from "@/components/Awards";
 import Sustainability from "@/components/Sustainability";
 import News from "@/components/News";
 import Footer from "@/components/Footer";
@@ -17,6 +18,7 @@ const Index = () => {
       <About />
       <Products />
       <Technology />
+      <Awards />
       <Sustainability />
       <News />
       <Footer />

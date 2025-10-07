@@ -36,15 +36,29 @@ const Header = () => {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? "bg-white shadow-md" : "bg-white/95 backdrop-blur-sm"
+        isScrolled ? "bg-white shadow-lg" : "bg-white/98 backdrop-blur-md"
       }`}
     >
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <a href="#home" className="text-2xl font-bold text-primary">
-              ipack
+            <a
+              href="#home"
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToSection("#home");
+              }}
+              className="flex items-center gap-3 group transition-all"
+            >
+              <img 
+                src="/ipack-logo.png" 
+                alt="ipack - Closer to You" 
+                className="h-10 md:h-12 w-auto transition-transform group-hover:scale-105"
+              />
+              <div className="hidden md:flex flex-col">
+                <span className="text-xs text-muted-foreground font-medium tracking-wide">Closer to You</span>
+              </div>
             </a>
           </div>
 
@@ -65,7 +79,7 @@ const Header = () => {
           <div className="hidden lg:block">
             <Button
               onClick={() => scrollToSection("#contact")}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-md hover:shadow-strong transition-all hover:scale-105"
             >
               Request a Quote
             </Button>

@@ -5,20 +5,20 @@ const Technology = () => {
   const features = [
     {
       icon: Gauge,
-      title: "High-Speed Printing",
-      description: "Uteco Diamond press running at 600 m/min for maximum efficiency",
+      title: "Extended Color Gamut (7-Color)",
+      description: "Advanced ECG printing technology delivering vibrant, consistent colors across all packaging designs",
       color: "text-primary",
     },
     {
       icon: Bot,
-      title: "Advanced Robotics",
-      description: "Fully automated production lines ensuring consistent quality",
+      title: "Automated Guided Vehicles (AGV)",
+      description: "State-of-the-art AGV logistics system for seamless material handling and warehouse automation",
       color: "text-accent",
     },
     {
       icon: BarChart3,
-      title: "Digital Transformation",
-      description: "Smart manufacturing with real-time monitoring and analytics",
+      title: "High-Speed Production",
+      description: "Uteco Diamond press operating at 600 m/min with precision robotics for maximum efficiency",
       color: "text-primary",
     },
   ];
@@ -28,11 +28,17 @@ const Technology = () => {
       <div className="container mx-auto px-4 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16 animate-fade-in">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
+          <div className="inline-flex items-center gap-2 bg-accent/10 rounded-full px-6 py-2 mb-4">
+            <BarChart3 className="w-5 h-5 text-accent" />
+            <span className="text-accent font-semibold text-sm tracking-wide uppercase">
+              Innovation & Technology
+            </span>
+          </div>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-foreground">
             Driven by Industry 4.0
           </h2>
-          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            Leveraging cutting-edge technology to deliver unparalleled quality and efficiency
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Award-winning smart manufacturing with cutting-edge automation and digital transformation
           </p>
         </div>
 
@@ -61,15 +67,26 @@ const Technology = () => {
 
         {/* Award Highlight */}
         <div className="max-w-4xl mx-auto">
-          <Card className="bg-gradient-to-br from-primary to-primary/80 text-white border-none shadow-2xl animate-scale-in">
-            <CardContent className="p-8 md:p-12 text-center">
-              <Award className="w-16 h-16 mx-auto mb-6" />
-              <h3 className="text-2xl md:text-3xl font-bold mb-4">
-                Winner of MIITE Award for Smart Manufacturing 2024
-              </h3>
-              <p className="text-white/90 text-lg">
-                Recognized for excellence in innovation and digital transformation
-              </p>
+          <Card className="bg-gradient-to-br from-primary via-primary/90 to-accent text-white border-none shadow-2xl animate-scale-in hover-lift">
+            <CardContent className="p-8 md:p-12">
+              <div className="flex flex-col md:flex-row items-center gap-6">
+                <div className="flex-shrink-0">
+                  <div className="w-24 h-24 rounded-full bg-white shadow-glow flex items-center justify-center">
+                    <Award className="w-12 h-12 text-primary" fill="currentColor" />
+                  </div>
+                </div>
+                <div className="text-center md:text-left flex-1">
+                  <div className="inline-flex items-center gap-2 bg-white/20 rounded-full px-4 py-1 mb-3">
+                    <span className="text-white font-bold text-sm">2022 Winner</span>
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-bold mb-2">
+                    PRIME Awards for Smart Manufacturing
+                  </h3>
+                  <p className="text-white/90 text-lg">
+                    Honored by UAE Ministry of Industry and Advanced Technology for pioneering Industry 4.0 implementation
+                  </p>
+                </div>
+              </div>
             </CardContent>
           </Card>
         </div>
