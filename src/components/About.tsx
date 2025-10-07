@@ -4,8 +4,11 @@ import { Factory, Package, Award, Trophy, Zap, CheckCircle } from "lucide-react"
 const About = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [visibleCards, setVisibleCards] = useState<number[]>([]);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const timelineRef = useRef<HTMLDivElement>(null);
 
+  // Main section visibility observer
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -23,6 +26,43 @@ const About = () => {
     return () => observer.disconnect();
   }, []);
 
+  // Scroll-based line progression
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!timelineRef.current) return;
+      
+      const rect = timelineRef.current.getBoundingClientRect();
+      const scrollTop = window.scrollY || window.pageYOffset;
+      const elementTop = rect.top + scrollTop;
+      const elementHeight = rect.height;
+      const windowHeight = window.innerHeight;
+      
+      // Calculate how much of the timeline section is scrolled
+      const scrolled = scrollTop + windowHeight - elementTop;
+      const progress = Math.max(0, Math.min(100, (scrolled / (elementHeight + windowHeight * 0.5)) * 100));
+      
+      setScrollProgress(progress);
+    };
+
+    // Throttle scroll events for performance
+    let ticking = false;
+    const throttledScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', throttledScroll, { passive: true });
+    handleScroll(); // Initial call
+    
+    return () => window.removeEventListener('scroll', throttledScroll);
+  }, []);
+
+  // Card visibility observer with staggered reveal
   useEffect(() => {
     if (!isVisible) return;
     
@@ -31,11 +71,14 @@ const About = () => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const index = parseInt(entry.target.getAttribute('data-index') || '0');
-            setVisibleCards(prev => [...new Set([...prev, index])]);
+            // Stagger the card visibility
+            setTimeout(() => {
+              setVisibleCards(prev => [...new Set([...prev, index])]);
+            }, index * 150);
           }
         });
       },
-      { threshold: 0.3 }
+      { threshold: 0.2, rootMargin: '-50px' }
     );
 
     const cards = document.querySelectorAll('.timeline-card');
@@ -142,18 +185,45 @@ const About = () => {
         </div>
 
         {/* Timeline Section */}
-        <div className="mt-20">
-          <h3 className="text-4xl md:text-5xl font-bold text-center mb-20 bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
+        <div className="mt-20" ref={timelineRef}>
+          <h3 className="text-4xl md:text-5xl font-bold text-center mb-20 bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent animate-fade-in">
             Our Journey
           </h3>
-          <div className="relative max-w-7xl mx-auto">
-            {/* Vertical Animated Line */}
+          <div className="relative max-w-7xl mx-auto timeline-container">
+            {/* Scroll-Based Progressive Vertical Line */}
             <div 
-              className="absolute left-1/2 transform -translate-x-1/2 w-1 bg-gradient-to-b from-primary/30 via-accent/50 to-primary/30 transition-all duration-1000 top-0 hidden md:block"
+              className="absolute left-1/2 transform -translate-x-1/2 top-0 hidden md:block"
               style={{
-                height: isVisible ? '100%' : '0%',
+                width: '2px',
+                height: '100%',
+                background: 'linear-gradient(180deg, hsl(var(--primary) / 0.3), hsl(var(--accent) / 0.5), hsl(var(--primary) / 0.3))',
               }}
-            />
+            >
+              {/* Animated Growing Line */}
+              <div 
+                className="absolute top-0 left-0 right-0"
+                style={{
+                  height: `${scrollProgress}%`,
+                  background: 'linear-gradient(180deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary)))',
+                  boxShadow: '0 0 20px hsl(var(--primary) / 0.5), 0 0 40px hsl(var(--accent) / 0.3)',
+                  transition: 'height 0.1s linear',
+                }}
+              />
+              
+              {/* Glowing Dot at Line Tip */}
+              <div 
+                className="absolute left-1/2 transform -translate-x-1/2"
+                style={{
+                  top: `${scrollProgress}%`,
+                  width: '12px',
+                  height: '12px',
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))',
+                  boxShadow: '0 0 20px hsl(var(--primary)), 0 0 40px hsl(var(--accent) / 0.5)',
+                  transition: 'top 0.1s linear',
+                }}
+              />
+            </div>
             
             {/* Timeline Items */}
             <div className="space-y-24 md:space-y-32">
@@ -170,28 +240,46 @@ const About = () => {
                       isLeft ? "md:flex-row" : "md:flex-row-reverse"
                     } flex-col`}
                   >
-                    {/* Content Card */}
+                    {/* Content Card with 3D Stacked Animation */}
                     <div 
-                      className={`w-full md:w-5/12 ${isLeft ? "md:pr-16" : "md:pl-16"} mb-8 md:mb-0`}
+                      className={`w-full md:w-5/12 ${isLeft ? "md:pr-16" : "md:pl-16"} mb-8 md:mb-0 timeline-card-wrapper`}
                       style={{
                         opacity: isCardVisible ? 1 : 0,
                         transform: isCardVisible 
-                          ? "translateX(0) scale(1)" 
-                          : `translateX(${isLeft ? '-50px' : '50px'}) scale(0.95)`,
-                        transition: `all 0.8s cubic-bezier(0.4, 0, 0.2, 1) ${index * 0.15}s`,
+                          ? "translateX(0) translateY(0) scale(1) rotateY(0deg)" 
+                          : `translateX(${isLeft ? '-100px' : '100px'}) translateY(50px) scale(0.9) rotateY(${isLeft ? '10deg' : '-10deg'})`,
+                        transition: `all 0.9s cubic-bezier(0.34, 1.56, 0.64, 1)`,
+                        transitionDelay: `${index * 0.2}s`,
+                        willChange: 'transform, opacity',
+                        zIndex: isCardVisible ? 10 - index : 0,
                       }}
                     >
-                      <div className="group relative backdrop-blur-sm bg-gradient-to-br from-background via-background to-primary/5 p-8 rounded-2xl border-2 border-primary/20 hover:border-primary/50 shadow-xl hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 hover:scale-105">
+                      <div className="group relative backdrop-blur-sm bg-gradient-to-br from-background via-background to-primary/5 p-8 rounded-2xl border-2 border-primary/20 hover:border-primary/50 shadow-xl hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 hover:scale-[1.05] hover:-translate-y-2" style={{ transformStyle: 'preserve-3d' }}>
                         {/* Glow Effect */}
                         <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
                         
-                        {/* Icon Badge */}
-                        <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-primary to-accent mb-6 shadow-lg ${isLeft ? '' : 'md:float-right'}`}>
+                        {/* Icon Badge with Rotation Animation */}
+                        <div 
+                          className={`inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-primary to-accent mb-6 shadow-lg ${isLeft ? '' : 'md:float-right'}`}
+                          style={{
+                            transform: isCardVisible ? 'rotate(0deg) scale(1)' : 'rotate(-180deg) scale(0.5)',
+                            opacity: isCardVisible ? 1 : 0,
+                            transition: `all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) ${index * 0.2 + 0.2}s`,
+                          }}
+                        >
                           <Icon className="w-8 h-8 text-white" />
                         </div>
 
-                        {/* Year Badge */}
-                        <div className={`inline-block px-6 py-2 bg-gradient-to-r from-primary to-accent text-white font-bold text-xl rounded-full mb-4 shadow-lg ${isLeft ? '' : 'md:float-right md:clear-both'}`}>
+                        {/* Year Badge with Bounce Animation */}
+                        <div 
+                          className={`inline-block px-6 py-2 bg-gradient-to-r from-primary to-accent text-white font-bold text-xl rounded-full mb-4 shadow-lg ${isLeft ? '' : 'md:float-right md:clear-both'}`}
+                          style={{
+                            transform: isCardVisible ? 'translateY(0) scale(1)' : 'translateY(-20px) scale(0.8)',
+                            opacity: isCardVisible ? 1 : 0,
+                            transition: `all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) ${index * 0.2 + 0.3}s`,
+                            boxShadow: isCardVisible ? '0 4px 20px hsl(var(--primary) / 0.5)' : '0 0 0 hsl(var(--primary) / 0)',
+                          }}
+                        >
                           {item.year}
                         </div>
 
@@ -200,15 +288,26 @@ const About = () => {
                           {item.event}
                         </h4>
 
-                        {/* Details List */}
+                        {/* Details List with Sequential Fade In */}
                         <ul className={`space-y-2 ${isLeft ? 'text-left' : 'md:text-right'}`}>
                           {item.details.map((detail, idx) => (
                             <li 
                               key={idx} 
                               className={`flex items-center gap-2 text-muted-foreground ${isLeft ? '' : 'md:justify-end'}`}
+                              style={{
+                                opacity: isCardVisible ? 1 : 0,
+                                transform: isCardVisible ? 'translateY(0)' : 'translateY(10px)',
+                                transition: `all 0.5s ease-out ${index * 0.2 + 0.4 + idx * 0.1}s`,
+                              }}
                             >
                               {!isLeft && <span className="hidden md:inline text-sm md:text-base">{detail}</span>}
-                              <div className="w-2 h-2 rounded-full bg-primary flex-shrink-0" />
+                              <div 
+                                className="w-2 h-2 rounded-full bg-primary flex-shrink-0"
+                                style={{
+                                  animation: isCardVisible ? 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite' : 'none',
+                                  animationDelay: `${idx * 0.2}s`,
+                                }}
+                              />
                               {isLeft && <span className="text-sm md:text-base">{detail}</span>}
                               {!isLeft && <span className="md:hidden text-sm">{detail}</span>}
                             </li>
@@ -217,32 +316,53 @@ const About = () => {
                       </div>
                     </div>
 
-                    {/* Center Dot with Icon */}
+                    {/* Center Dot with Progressive Scale and Pulse */}
                     <div 
                       className="absolute left-1/2 transform -translate-x-1/2 z-10 hidden md:block"
                       style={{
                         opacity: isCardVisible ? 1 : 0,
-                        scale: isCardVisible ? 1 : 0.5,
-                        transition: `all 0.6s cubic-bezier(0.4, 0, 0.2, 1) ${index * 0.15 + 0.3}s`,
+                        transform: isCardVisible ? 'scale(1) rotate(0deg)' : 'scale(0) rotate(-180deg)',
+                        transition: `all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) ${index * 0.2}s`,
                       }}
                     >
-                      <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-primary to-accent shadow-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                        {/* Pulse Ring */}
-                        <div className="absolute inset-0 rounded-full bg-primary animate-ping opacity-30" />
+                      <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-primary to-accent shadow-2xl flex items-center justify-center transition-transform duration-300 hover:scale-125 cursor-pointer">
+                        {/* Multiple Pulse Rings */}
+                        <div 
+                          className="absolute inset-0 rounded-full bg-primary opacity-30"
+                          style={{
+                            animation: isCardVisible ? 'ping 2s cubic-bezier(0, 0, 0.2, 1) infinite' : 'none',
+                          }}
+                        />
+                        <div 
+                          className="absolute inset-0 rounded-full bg-accent opacity-20"
+                          style={{
+                            animation: isCardVisible ? 'ping 2s cubic-bezier(0, 0, 0.2, 1) infinite 1s' : 'none',
+                          }}
+                        />
+                        
+                        {/* Glow Effect */}
                         <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/50 to-accent/50 blur-md" />
                         
-                        {/* Icon */}
-                        <Icon className="w-10 h-10 text-white relative z-10" />
+                        {/* Icon with Rotation */}
+                        <Icon 
+                          className="w-10 h-10 text-white relative z-10"
+                          style={{
+                            transform: isCardVisible ? 'rotate(0deg)' : 'rotate(-360deg)',
+                            transition: `transform 1s cubic-bezier(0.34, 1.56, 0.64, 1) ${index * 0.2 + 0.2}s`,
+                          }}
+                        />
                       </div>
                     </div>
 
-                    {/* Connection Line */}
+                    {/* Animated Connection Line Drawing Effect */}
                     <div 
-                      className={`hidden md:block absolute top-1/2 ${isLeft ? 'left-1/2 ml-10' : 'right-1/2 mr-10'} w-8 h-0.5 bg-gradient-to-r ${isLeft ? 'from-primary to-transparent' : 'from-transparent to-primary'}`}
+                      className={`hidden md:block absolute top-1/2 ${isLeft ? 'left-1/2 ml-10' : 'right-1/2 mr-10'} h-0.5 bg-gradient-to-r ${isLeft ? 'from-primary via-accent to-transparent' : 'from-transparent via-accent to-primary'}`}
                       style={{
                         opacity: isCardVisible ? 1 : 0,
-                        width: isCardVisible ? '32px' : '0px',
-                        transition: `all 0.6s ease-out ${index * 0.15 + 0.5}s`,
+                        width: isCardVisible ? '48px' : '0px',
+                        transition: `all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) ${index * 0.2 + 0.4}s`,
+                        boxShadow: isCardVisible ? `0 0 10px hsl(var(--primary) / 0.5)` : 'none',
+                        transformOrigin: isLeft ? 'left' : 'right',
                       }}
                     />
                   </div>

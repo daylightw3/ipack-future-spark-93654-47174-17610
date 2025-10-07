@@ -216,4 +216,14 @@ All colors MUST be HSL.
   .gradient-card {
     background: var(--gradient-card);
   }
+
+  /* Timeline 3D Container */
+  .timeline-container {
+    perspective: 2000px;
+    perspective-origin: center center;
+  }
+
+  .timeline-card-wrapper {
+    transform-style: preserve-3d;
+  }
 }
