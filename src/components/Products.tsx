@@ -1,25 +1,35 @@
 import { Card, CardContent } from "@/components/ui/card";
-import productDairy from "@/assets/products-dairy.jpg";
+import productPortfolio from "@/assets/products-portfolio.png";
+import productDesigns from "@/assets/product-designs.png";
+import productMaterials from "@/assets/product-materials.jpg";
 import productJuice from "@/assets/products-juice.jpg";
-import productFood from "@/assets/products-food.jpg";
 
 const Products = () => {
   const products = [
     {
-      title: "For Dairy & Milk",
-      image: productDairy,
-      description: "Premium quality packaging solutions for dairy products",
+      title: "Design Flexibility",
+      image: productDesigns,
+      description: "1000+ vibrant design possibilities with advanced printing technology",
+    },
+    {
+      title: "Advanced Materials",
+      image: productMaterials,
+      description: "Multi-layer technology ensuring product safety and freshness",
     },
     {
       title: "For Juices & Beverages",
       image: productJuice,
-      description: "Fresh and vibrant designs for juice products",
+      description: "Premium packaging solutions for all beverage types",
     },
-    {
-      title: "For Tomato Paste & Foods",
-      image: productFood,
-      description: "Durable packaging for food products",
-    },
+  ];
+
+  const formats = [
+    { name: "IBA-Slim", size: "180ml - 1000ml" },
+    { name: "IBA-Base", size: "125ml - 1000ml" },
+    { name: "IBA-Square", size: "180ml - 1000ml" },
+    { name: "ICA-Classic", size: "200ml - 1000ml" },
+    { name: "ILA-Leaf", size: "180ml - 1000ml" },
+    { name: "IFA-Fino", size: "125ml - 250ml" },
   ];
 
   return (
@@ -45,8 +55,19 @@ const Products = () => {
           </div>
         </div>
 
+        {/* Hero Portfolio Image */}
+        <div className="mb-16 animate-scale-in">
+          <div className="rounded-3xl overflow-hidden shadow-2xl">
+            <img
+              src={productPortfolio}
+              alt="ipack Product Portfolio - Complete Range"
+              className="w-full h-auto"
+            />
+          </div>
+        </div>
+
         {/* Product Grid */}
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 gap-8 mb-16">
           {products.map((product, index) => (
             <Card
               key={product.title}
@@ -68,6 +89,25 @@ const Products = () => {
               </CardContent>
             </Card>
           ))}
+        </div>
+
+        {/* Package Formats */}
+        <div className="max-w-4xl mx-auto">
+          <h3 className="text-2xl font-bold text-center mb-8 text-foreground">
+            Available Package Formats
+          </h3>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+            {formats.map((format, index) => (
+              <div
+                key={format.name}
+                className="bg-white rounded-xl p-6 hover-lift animate-fade-in text-center shadow-md"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <h4 className="text-lg font-bold text-primary mb-2">{format.name}</h4>
+                <p className="text-sm text-muted-foreground">{format.size}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

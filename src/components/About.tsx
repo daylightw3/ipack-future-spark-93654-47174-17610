@@ -80,8 +80,15 @@ const About = () => {
             Our Journey
           </h3>
           <div className="relative">
-            {/* Timeline Line */}
-            <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-primary/20"></div>
+            {/* Animated Timeline Line with Gradient */}
+            <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gradient-to-b from-primary via-accent to-primary/40 opacity-30"></div>
+            <div 
+              className="absolute left-1/2 transform -translate-x-1/2 w-1 bg-gradient-to-b from-primary via-accent to-primary origin-top transition-all duration-1000 ease-out"
+              style={{ 
+                height: isVisible ? '100%' : '0%',
+                boxShadow: '0 0 20px rgba(240, 86, 35, 0.5)'
+              }}
+            ></div>
 
             {/* Timeline Items */}
             <div className="space-y-12">
@@ -91,15 +98,42 @@ const About = () => {
                   className={`flex items-center gap-8 ${
                     index % 2 === 0 ? "flex-row" : "flex-row-reverse"
                   } animate-fade-in`}
-                  style={{ animationDelay: `${index * 0.15}s` }}
+                  style={{ 
+                    animationDelay: `${index * 0.2}s`,
+                    opacity: 0,
+                    animation: isVisible ? `fade-in 0.6s ease-out ${index * 0.2}s forwards` : 'none'
+                  }}
                 >
+                  {/* Card */}
                   <div className={`flex-1 ${index % 2 === 0 ? "text-right" : "text-left"}`}>
-                    <div className="bg-white p-6 rounded-xl shadow-md hover-lift">
-                      <div className="text-2xl font-bold text-primary mb-2">{item.year}</div>
-                      <div className="text-foreground font-medium">{item.event}</div>
+                    <div 
+                      className="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 border border-primary/10"
+                      style={{
+                        transform: isVisible 
+                          ? 'translateX(0)' 
+                          : index % 2 === 0 ? 'translateX(-30px)' : 'translateX(30px)',
+                        transition: `all 0.6s ease-out ${index * 0.2}s`
+                      }}
+                    >
+                      <div className="inline-block px-4 py-1 rounded-full bg-gradient-to-r from-primary to-accent text-white font-bold text-lg mb-3 shadow-md">
+                        {item.year}
+                      </div>
+                      <div className="text-foreground font-medium text-base leading-relaxed">{item.event}</div>
                     </div>
                   </div>
-                  <div className="w-4 h-4 bg-primary rounded-full border-4 border-white shadow-lg z-10"></div>
+
+                  {/* Animated Dot */}
+                  <div 
+                    className="relative w-6 h-6 z-10"
+                    style={{
+                      animation: isVisible ? `pulse 2s ease-in-out ${index * 0.2}s infinite` : 'none'
+                    }}
+                  >
+                    <div className="absolute inset-0 bg-primary rounded-full border-4 border-white shadow-lg"></div>
+                    <div className="absolute inset-0 bg-primary rounded-full animate-ping opacity-40"></div>
+                  </div>
+
+                  {/* Empty space */}
                   <div className="flex-1"></div>
                 </div>
               ))}

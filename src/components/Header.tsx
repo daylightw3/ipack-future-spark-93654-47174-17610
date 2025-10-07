@@ -52,7 +52,7 @@ const Header = () => {
               className="flex items-center gap-3 group transition-all"
             >
               <img 
-                src="/ipack-logo.png" 
+                src="/src/assets/ipack-logo-new.png" 
                 alt="ipack - Closer to You" 
                 className="h-10 md:h-12 w-auto transition-transform group-hover:scale-105"
               />

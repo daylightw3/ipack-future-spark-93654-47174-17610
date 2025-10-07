@@ -1,5 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Gauge, Bot, BarChart3, Award } from "lucide-react";
+import factoryAgv from "@/assets/factory-agv.jpg";
+import factoryQuality from "@/assets/factory-quality.jpg";
 
 const Technology = () => {
   const features = [
@@ -14,12 +16,14 @@ const Technology = () => {
       title: "Automated Guided Vehicles (AGV)",
       description: "State-of-the-art AGV logistics system for seamless material handling and warehouse automation",
       color: "text-accent",
+      image: factoryAgv,
     },
     {
       icon: BarChart3,
       title: "High-Speed Production",
       description: "Uteco Diamond press operating at 600 m/min with precision robotics for maximum efficiency",
       color: "text-primary",
+      image: factoryQuality,
     },
   ];
 
@@ -47,9 +51,18 @@ const Technology = () => {
           {features.map((feature, index) => (
             <Card
               key={feature.title}
-              className="hover-lift animate-scale-in border-none shadow-md"
+              className="hover-lift animate-scale-in border-none shadow-md overflow-hidden"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
+              {feature.image && (
+                <div className="aspect-video overflow-hidden">
+                  <img
+                    src={feature.image}
+                    alt={feature.title}
+                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                  />
+                </div>
+              )}
               <CardContent className="p-8 text-center">
                 <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-secondary mb-6">
                   <feature.icon className={`w-8 h-8 ${feature.color}`} />

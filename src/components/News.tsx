@@ -1,12 +1,10 @@
-import gulfNewsLogo from "@/assets/gulf-news-logo.png";
-
 const News = () => {
   const partners = [
-    { name: "Gulf News", logo: gulfNewsLogo },
-    { name: "Packaging MEA", logo: null },
-    { name: "UAE Ministry of Industry", logo: null },
-    { name: "Abu Dhabi Investment Office", logo: null },
-    { name: "Emirates Chamber", logo: null },
+    { name: "Gulf News" },
+    { name: "Packaging MEA" },
+    { name: "UAE Ministry of Industry" },
+    { name: "Abu Dhabi Investment Office" },
+    { name: "Emirates Chamber" },
   ];
 
   return (
@@ -35,17 +33,9 @@ const News = () => {
               className="flex items-center justify-center p-6 bg-white rounded-xl hover-lift border border-gray-100 transition-all animate-fade-in"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              {partner.logo ? (
-                <img 
-                  src={partner.logo} 
-                  alt={partner.name} 
-                  className="max-h-12 w-auto grayscale hover:grayscale-0 transition-all"
-                />
-              ) : (
-                <span className="text-base font-semibold text-muted-foreground text-center">
-                  {partner.name}
-                </span>
-              )}
+              <span className="text-base font-semibold text-muted-foreground text-center">
+                {partner.name}
+              </span>
             </div>
           ))}
         </div>
