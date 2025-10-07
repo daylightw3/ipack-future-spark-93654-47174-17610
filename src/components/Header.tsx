@@ -81,7 +81,7 @@ const Header = () => {
               onClick={() => scrollToSection("#contact")}
               className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-md hover:shadow-strong transition-all hover:scale-105"
             >
-              Request a Quote
+              Contact Us
             </Button>
           </div>
 
@@ -115,7 +115,7 @@ const Header = () => {
                 onClick={() => scrollToSection("#contact")}
                 className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold w-full"
               >
-                Request a Quote
+                Contact Us
               </Button>
             </nav>
           </div>

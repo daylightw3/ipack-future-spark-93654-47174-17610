@@ -94,8 +94,15 @@ const Footer = () => {
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             {/* Logo and Mission */}
             <div className="text-center md:text-left">
-              <div className="text-2xl font-bold mb-2">ipack</div>
-              <p className="text-white/60 text-sm">
+              <div className="flex flex-col items-center md:items-start gap-2">
+                <img 
+                  src="/ipack-logo.png" 
+                  alt="ipack Logo" 
+                  className="h-12 transition-transform duration-300 hover:scale-105"
+                />
+                <div className="text-sm text-white/60 font-medium">Closer to You</div>
+              </div>
+              <p className="text-white/60 text-sm mt-2">
                 Engineering the future of aseptic packaging
               </p>
             </div>

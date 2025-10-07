@@ -27,41 +27,67 @@ const Hero = () => {
       </section>
 
       {/* Content Section Below Avatar */}
-      <section className="relative py-20 bg-background">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="max-w-4xl mx-auto text-center animate-fade-in">
-            <div className="space-y-8">
-              <div className="space-y-4">
-                <p className="text-accent font-semibold text-lg tracking-wide uppercase">
-                  ipack - Closer to You
+      <section className="relative py-24 overflow-hidden bg-gradient-to-b from-background via-background to-primary/5">
+        {/* Decorative Background Elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+        </div>
+
+        <div className="container mx-auto px-4 lg:px-8 relative z-10">
+          <div className="max-w-5xl mx-auto">
+            {/* Premium Glass Container */}
+            <div className="relative backdrop-blur-sm bg-background/80 border border-primary/20 rounded-3xl p-12 md:p-16 shadow-2xl hover:shadow-primary/20 transition-all duration-500">
+              {/* Gradient Border Glow Effect */}
+              <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 blur-xl -z-10" />
+              
+              <div className="space-y-10 text-center">
+                {/* Animated Tagline */}
+                <div className="animate-fade-in">
+                  <p className="inline-block text-primary font-bold text-lg tracking-widest uppercase px-6 py-2 bg-primary/10 rounded-full border border-primary/30">
+                    ipack - Closer to You
+                  </p>
+                </div>
+
+                {/* Staggered Headline Animation */}
+                <div className="space-y-4 animate-slide-up" style={{ animationDelay: '0.2s' }}>
+                  <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight tracking-tight">
+                    Engineering the Future of{" "}
+                    <span className="relative inline-block">
+                      <span className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent animate-gradient bg-[length:200%_auto]">
+                        Aseptic Packaging
+                      </span>
+                      <span className="absolute inset-0 blur-2xl bg-gradient-to-r from-primary/30 via-accent/30 to-primary/30 -z-10" />
+                    </span>
+                  </h1>
+                </div>
+
+                {/* Enhanced Description */}
+                <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed max-w-3xl mx-auto animate-fade-in font-light" style={{ animationDelay: '0.4s' }}>
+                  Sustainable, innovative, and reliable packaging solutions powered by{" "}
+                  <span className="text-foreground font-semibold">Industry 4.0</span>. 
+                  Protecting your products and our planet with cutting-edge technology.
                 </p>
-                <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight tracking-tight">
-                  Engineering the Future of{" "}
-                  <span className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
-                    Aseptic Packaging
-                  </span>
-                </h1>
-              </div>
-              <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-3xl mx-auto">
-                Sustainable, innovative, and reliable packaging solutions powered by Industry 4.0. 
-                Protecting your products and our planet with cutting-edge technology.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 pt-4 justify-center">
-                <Button
-                  size="lg"
-                  onClick={() => scrollToSection("#products")}
-                  className="font-semibold text-lg px-8 shadow-lg transition-all duration-300 hover:scale-105"
-                >
-                  Explore Our Solutions
-                </Button>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  onClick={() => scrollToSection("#sustainability")}
-                  className="font-semibold text-lg px-8 transition-all duration-300"
-                >
-                  Our Commitment
-                </Button>
+
+                {/* Animated CTA Buttons */}
+                <div className="flex flex-col sm:flex-row gap-6 pt-6 justify-center animate-scale-in" style={{ animationDelay: '0.6s' }}>
+                  <Button
+                    size="lg"
+                    onClick={() => scrollToSection("#products")}
+                    className="group font-bold text-lg px-10 py-6 shadow-2xl shadow-primary/50 transition-all duration-300 hover:scale-105 hover:shadow-primary/70 relative overflow-hidden"
+                  >
+                    <span className="relative z-10">Explore Our Solutions</span>
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary via-accent to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  </Button>
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    onClick={() => scrollToSection("#sustainability")}
+                    className="font-bold text-lg px-10 py-6 border-2 border-primary/50 hover:border-primary hover:bg-primary/10 transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                  >
+                    Our Commitment
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
