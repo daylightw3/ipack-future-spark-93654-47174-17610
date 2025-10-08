@@ -38,8 +38,10 @@ const About = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [visibleCards, setVisibleCards] = useState<number[]>([]);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);
   const sectionRef = useRef<HTMLDivElement>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
+  const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   // Main section visibility observer
   useEffect(() => {
@@ -59,7 +61,7 @@ const About = () => {
     return () => observer.disconnect();
   }, []);
 
-  // Scroll-based line progression
+  // Scroll-based line progression and active card tracking
   useEffect(() => {
     const handleScroll = () => {
       if (!timelineRef.current) return;
@@ -75,6 +77,21 @@ const About = () => {
       const progress = Math.max(0, Math.min(100, (scrolled / (elementHeight + windowHeight * 0.5)) * 100));
       
       setScrollProgress(progress);
+
+      // Track which card is active at the sticky position
+      const stickTop = windowHeight * 0.2;
+      let newActiveIndex = 0;
+      
+      itemRefs.current.forEach((item, index) => {
+        if (item) {
+          const itemRect = item.getBoundingClientRect();
+          if (itemRect.top <= stickTop && itemRect.bottom > stickTop) {
+            newActiveIndex = index;
+          }
+        }
+      });
+      
+      setActiveIndex(newActiveIndex);
     };
 
     // Throttle scroll events for performance
@@ -309,23 +326,31 @@ const About = () => {
                 return (
                   <div
                     key={index}
+                    ref={(el) => (itemRefs.current[index] = el)}
                     data-index={index}
                     className={`timeline-card relative flex items-center justify-center ${
                       isLeft ? "md:flex-row" : "md:flex-row-reverse"
-                    } flex-col`}
+                    } flex-col min-h-[120vh] md:min-h-[140vh]`}
                   >
-                    {/* Content Card with 3D Stacked Animation */}
+                    {/* Content Card with Sticky Stacked Animation */}
                     <div 
-                      className={`w-full md:w-1/2 mb-8 md:mb-0 timeline-card-wrapper ${isLeft ? 'md:pr-12' : 'md:pl-12'}`}
+                      className={`w-full md:w-1/2 mb-8 md:mb-0 timeline-card-wrapper ${isLeft ? 'md:pr-12' : 'md:pl-12'} md:sticky md:top-[20vh]`}
                       style={{
-                        opacity: isCardVisible ? 1 : 0,
-                        transform: isCardVisible 
-                          ? "translateX(0) translateY(0) scale(1) rotateY(0deg)" 
-                          : `translateX(${isLeft ? '-100px' : '100px'}) translateY(50px) scale(0.9) rotateY(${isLeft ? '10deg' : '-10deg'})`,
-                        transition: `all 0.9s cubic-bezier(0.34, 1.56, 0.64, 1)`,
-                        transitionDelay: `${index * 0.2}s`,
+                        opacity: isCardVisible ? (
+                          index === activeIndex ? 1 : 
+                          index < activeIndex ? 0.9 : 
+                          0
+                        ) : 0,
+                        transform: isCardVisible ? (
+                          index === activeIndex 
+                            ? "translateX(0) translateY(0) scale(1)" 
+                            : index < activeIndex
+                              ? "translateX(0) translateY(12px) scale(0.96)"
+                              : `translateX(${isLeft ? '-100px' : '100px'}) translateY(40px) scale(0.98)`
+                        ) : `translateX(${isLeft ? '-100px' : '100px'}) translateY(50px) scale(0.9)`,
+                        transition: `all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)`,
                         willChange: 'transform, opacity',
-                        zIndex: isCardVisible ? 10 - index : 0,
+                        zIndex: 100 + index,
                       }}
                     >
                       <div className="group relative bg-card p-5 md:p-6 rounded-lg border shadow-sm transition-all duration-500 hover:-translate-y-1" style={{ transformStyle: 'preserve-3d' }}>
