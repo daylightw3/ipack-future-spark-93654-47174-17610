@@ -37,8 +37,19 @@ const useCountAnimation = (end: number, duration: number = 2000, isVisible: bool
 const About = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [sectionProgress, setSectionProgress] = useState(0);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
+
+  // Detect reduced motion preference
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReducedMotion(mediaQuery.matches);
+    
+    const handleChange = () => setPrefersReducedMotion(mediaQuery.matches);
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
 
   // Main section visibility observer
   useEffect(() => {
@@ -154,6 +165,9 @@ const About = () => {
     },
   ];
 
+  // Dynamic section height based on number of cards
+  const timelineHeight = Math.min(40 + timeline.length * 40, 140);
+
   return (
     <section id="about" ref={sectionRef} className="py-20 bg-background">
       <div className="container mx-auto px-4 lg:px-8">
@@ -234,7 +248,7 @@ const About = () => {
         </div>
 
         {/* Timeline Section */}
-        <div className="mt-20" ref={timelineRef} style={{ minHeight: '180vh' }}>
+        <div className="mt-20" ref={timelineRef} style={{ minHeight: `${timelineHeight}vh` }}>
           <h3 className="text-4xl md:text-5xl font-bold text-center mb-20 text-foreground animate-fade-in">
             Our Journey
           </h3>
@@ -287,32 +301,54 @@ const About = () => {
                 const activeIndex = Math.floor(sectionProgress * numCards);
                 const localProgress = (sectionProgress * numCards) % 1;
                 
+                // Depth from active card (for stacking effect)
+                const depth = activeIndex - index;
+                
                 // Card visibility and animation logic
                 let opacity = 0;
-                let translateX = isLeft ? -100 : 100;
+                let translateX = isLeft ? -120 : 120;
                 let translateY = 0;
-                let scale = 0.98;
+                let scale = 0.96;
                 let zIndex = 100 + index;
+                let pointerEvents = 'auto' as 'auto' | 'none';
+                let ariaHidden = true;
+                
+                // Enhanced styling classes
+                let cardClasses = "group relative p-6 md:px-8 md:py-10 rounded-2xl border-2 transition-all duration-500";
                 
                 if (index < activeIndex) {
-                  // Past cards - stacked underneath
-                  opacity = 0.35;
+                  // Past cards - depth-based stacking
+                  opacity = 1 - Math.min(depth * 0.18, 0.55);
                   translateX = 0;
-                  translateY = 6;
-                  scale = 0.96;
+                  translateY = Math.min(depth * 10, 36);
+                  scale = Math.max(1 - depth * 0.02, 0.92);
+                  pointerEvents = 'none';
+                  ariaHidden = true;
+                  cardClasses += " bg-gradient-to-br from-background to-primary/5 border-primary/10 shadow-lg";
                 } else if (index === activeIndex) {
-                  // Current active card
+                  // Current active card - highlighted
                   opacity = 1;
                   translateX = 0;
                   translateY = 0;
                   scale = 1;
+                  pointerEvents = 'auto';
+                  ariaHidden = false;
+                  cardClasses += " bg-gradient-to-br from-background to-primary/5 border-primary/15 shadow-2xl ring-1 ring-primary/20";
                 } else if (index === activeIndex + 1) {
                   // Next card - animating in
                   opacity = localProgress;
-                  translateX = (isLeft ? -100 : 100) * (1 - localProgress);
+                  translateX = (isLeft ? -120 : 120) * (1 - localProgress);
                   translateY = 0;
-                  scale = 0.98 + (0.02 * localProgress);
+                  scale = 0.96 + (0.04 * localProgress);
+                  pointerEvents = 'none';
+                  ariaHidden = true;
+                  cardClasses += " bg-gradient-to-br from-background to-primary/5 border-primary/15 shadow-xl";
+                } else {
+                  // Future cards - hidden
+                  cardClasses += " bg-gradient-to-br from-background to-primary/5 border-primary/10 shadow-lg";
                 }
+                
+                const transitionDuration = prefersReducedMotion ? '0s' : '0.6s';
                 
                 return (
                   <div
@@ -321,43 +357,53 @@ const About = () => {
                     style={{
                       opacity,
                       transform: `translateX(${translateX}px) translateY(${translateY}px) scale(${scale})`,
-                      transition: 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
+                      transition: `all ${transitionDuration} cubic-bezier(0.4, 0, 0.2, 1)`,
                       zIndex,
                       [isLeft ? 'left' : 'right']: 0,
+                      pointerEvents,
                     }}
+                    aria-hidden={ariaHidden}
                   >
-                    <div className="group relative bg-card p-6 md:p-8 rounded-2xl border-2 shadow-lg hover:shadow-xl transition-all duration-500">
+                    <div className={cardClasses}>
                       {/* Year */}
                       <div className={`${isLeft ? '' : 'md:text-right'} mb-4`}>
-                        <span className="text-5xl md:text-6xl font-bold text-foreground">{item.year}</span>
+                        <span className="text-5xl md:text-6xl font-bold bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent">
+                          {item.year}
+                        </span>
                       </div>
 
                       {/* Icon */}
-                      <div className={`flex ${isLeft ? 'justify-start' : 'md:justify-end'} mb-4`}>
-                        <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center">
-                          <Icon className="w-7 h-7 text-primary" />
+                      <div className={`flex ${isLeft ? 'justify-start' : 'md:justify-end'} mb-6`}>
+                        <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                          <Icon className="w-8 h-8 text-primary" />
                         </div>
                       </div>
 
                       {/* Event Title */}
-                      <h4 className={`text-xl md:text-2xl font-bold mb-4 text-foreground ${isLeft ? 'text-left' : 'md:text-right'}`}>
+                      <h4 className={`text-xl md:text-2xl font-bold mb-6 text-foreground ${isLeft ? 'text-left' : 'md:text-right'}`}>
                         {item.event}
                       </h4>
 
                       {/* Details List */}
-                      <ul className={`space-y-2 ${isLeft ? 'text-left' : 'md:text-right'}`}>
+                      <ul className={`space-y-3 ${isLeft ? 'text-left' : 'md:text-right'}`}>
                         {item.details.map((detail, idx) => (
-                          <li key={idx} className="text-muted-foreground text-sm md:text-base leading-relaxed">
-                            • {detail}
+                          <li key={idx} className="text-muted-foreground text-sm md:text-base leading-relaxed flex items-start gap-2">
+                            <span className="text-primary mt-1">•</span>
+                            <span className="flex-1">{detail}</span>
                           </li>
                         ))}
                       </ul>
                     </div>
 
                     {/* Center Dot */}
-                    <div 
-                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 hidden md:block w-4 h-4 rounded-full border-2 border-primary bg-background shadow-lg"
-                    />
+                    {index === activeIndex && (
+                      <div 
+                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 hidden md:block w-5 h-5 rounded-full border-2 border-primary bg-background shadow-lg"
+                        style={{
+                          boxShadow: '0 0 20px hsl(var(--primary) / 0.4), 0 0 40px hsl(var(--accent) / 0.3)',
+                        }}
+                      />
+                    )}
                   </div>
                 );
               })}
