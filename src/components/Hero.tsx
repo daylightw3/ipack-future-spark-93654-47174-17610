@@ -1,28 +1,19 @@
 import { Button } from "@/components/ui/button";
 import { MessageCircle } from "lucide-react";
-
 const Hero = () => {
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+      element.scrollIntoView({
+        behavior: "smooth"
+      });
     }
   };
-
-  return (
-    <>
+  return <>
       {/* Full-Screen Avatar Background */}
-      <section
-        id="home"
-        className="relative min-h-screen overflow-hidden"
-      >
+      <section id="home" className="relative min-h-screen overflow-hidden">
         <div className="absolute inset-0">
-          <iframe
-            src="https://labs.heygen.com/guest/streaming-embed?share=eyJxdWFsaXR5IjoiaGlnaCIsImF2YXRhck5hbWUiOiIxZWM1NmNhZDI0Zjg0YzhkOGEzYmFjNDlh%0D%0AYmIxMTk3MSIsInByZXZpZXdJbWciOiJodHRwczovL2ZpbGVzMi5oZXlnZW4uYWkvYXZhdGFyL3Yz%0D%0ALzFlYzU2Y2FkMjRmODRjOGQ4YTNiYWM0OWFiYjExOTcxL2Z1bGwvMi4yL3ByZXZpZXdfdGFyZ2V0%0D%0ALndlYnAiLCJuZWVkUmVtb3ZlQmFja2dyb3VuZCI6ZmFsc2UsImtub3dsZWRnZUJhc2VJZCI6ImZj%0D%0AMTI4YTkzZDhjYTRmOGJiMTRhNDE4YWJkNDYzM2I1IiwidXNlcm5hbWUiOiI5ODMyYTRjM2EzMzI0%0D%0AMzI4YjhiNGJjMWYyY2I0ZjllOCJ9&inIFrame=1"
-            allow="microphone camera"
-            className="w-full h-full border-0"
-            title="HeyGen Interactive AI Assistant"
-          />
+          <iframe src="https://labs.heygen.com/guest/streaming-embed?share=eyJxdWFsaXR5IjoiaGlnaCIsImF2YXRhck5hbWUiOiIxZWM1NmNhZDI0Zjg0YzhkOGEzYmFjNDlh%0D%0AYmIxMTk3MSIsInByZXZpZXdJbWciOiJodHRwczovL2ZpbGVzMi5oZXlnZW4uYWkvYXZhdGFyL3Yz%0D%0ALzFlYzU2Y2FkMjRmODRjOGQ4YTNiYWM0OWFiYjExOTcxL2Z1bGwvMi4yL3ByZXZpZXdfdGFyZ2V0%0D%0ALndlYnAiLCJuZWVkUmVtb3ZlQmFja2dyb3VuZCI6ZmFsc2UsImtub3dsZWRnZUJhc2VJZCI6ImZj%0D%0AMTI4YTkzZDhjYTRmOGJiMTRhNDE4YWJkNDYzM2I1IiwidXNlcm5hbWUiOiI5ODMyYTRjM2EzMzI0%0D%0AMzI4YjhiNGJjMWYyY2I0ZjllOCJ9&inIFrame=1" allow="microphone camera" className="w-full h-full border-0" title="HeyGen Interactive AI Assistant" />
         </div>
       </section>
 
@@ -31,7 +22,9 @@ const Hero = () => {
         {/* Decorative Background Elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/10 rounded-full blur-3xl animate-pulse" style={{
+          animationDelay: '1s'
+        }} />
         </div>
 
         <div className="container mx-auto px-4 lg:px-8 relative z-10">
@@ -50,7 +43,9 @@ const Hero = () => {
                 </div>
 
                 {/* Staggered Headline Animation */}
-                <div className="space-y-4 animate-slide-up" style={{ animationDelay: '0.2s' }}>
+                <div className="space-y-4 animate-slide-up" style={{
+                animationDelay: '0.2s'
+              }}>
                   <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight tracking-tight">
                     Engineering the Future of{" "}
                     <span className="relative inline-block">
@@ -63,28 +58,17 @@ const Hero = () => {
                 </div>
 
                 {/* Enhanced Description */}
-                <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed max-w-3xl mx-auto animate-fade-in font-light" style={{ animationDelay: '0.4s' }}>
-                  Sustainable, innovative, and reliable packaging solutions powered by{" "}
-                  <span className="text-foreground font-semibold">Industry 4.0</span>. 
-                  Protecting your products and our planet with cutting-edge technology.
-                </p>
+                
 
                 {/* Animated CTA Buttons */}
-                <div className="flex flex-col sm:flex-row gap-6 pt-6 justify-center animate-scale-in" style={{ animationDelay: '0.6s' }}>
-                  <Button
-                    size="lg"
-                    onClick={() => scrollToSection("#products")}
-                    className="group font-bold text-lg px-10 py-6 shadow-2xl shadow-primary/50 transition-all duration-300 hover:scale-105 hover:shadow-primary/70 relative overflow-hidden"
-                  >
+                <div className="flex flex-col sm:flex-row gap-6 pt-6 justify-center animate-scale-in" style={{
+                animationDelay: '0.6s'
+              }}>
+                  <Button size="lg" onClick={() => scrollToSection("#products")} className="group font-bold text-lg px-10 py-6 shadow-2xl shadow-primary/50 transition-all duration-300 hover:scale-105 hover:shadow-primary/70 relative overflow-hidden">
                     <span className="relative z-10">Explore Our Solutions</span>
                     <div className="absolute inset-0 bg-gradient-to-r from-primary via-accent to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </Button>
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    onClick={() => scrollToSection("#sustainability")}
-                    className="font-bold text-lg px-10 py-6 border-2 border-primary/50 hover:border-primary hover:bg-primary/10 transition-all duration-300 hover:scale-105 hover:shadow-lg"
-                  >
+                  <Button size="lg" variant="outline" onClick={() => scrollToSection("#sustainability")} className="font-bold text-lg px-10 py-6 border-2 border-primary/50 hover:border-primary hover:bg-primary/10 transition-all duration-300 hover:scale-105 hover:shadow-lg">
                     Our Commitment
                   </Button>
                 </div>
@@ -93,8 +77,6 @@ const Hero = () => {
           </div>
         </div>
       </section>
-    </>
-  );
+    </>;
 };
-
 export default Hero;
