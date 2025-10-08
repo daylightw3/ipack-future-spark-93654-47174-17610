@@ -31,9 +31,6 @@ const About = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [sectionProgress, setSectionProgress] = useState(0);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-  const [isScrollLocked, setIsScrollLocked] = useState(false);
-  const [scrollLockProgress, setScrollLockProgress] = useState(0);
-  const [hasCompletedTimeline, setHasCompletedTimeline] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
 
@@ -61,141 +58,43 @@ const About = () => {
     return () => observer.disconnect();
   }, []);
 
-  // Timeline visibility and scroll lock detection
+  // Professional scroll lock with progress tracking
   useEffect(() => {
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && !hasCompletedTimeline) {
-        setIsScrollLocked(true);
-      } else if (!entry.isIntersecting) {
-        setIsScrollLocked(false);
-      }
-    }, {
-      threshold: 0.5
-    });
-    if (timelineRef.current) {
-      observer.observe(timelineRef.current);
-    }
-    return () => observer.disconnect();
-  }, [hasCompletedTimeline]);
-
-  // Scroll lock mechanism
-  useEffect(() => {
-    if (!isScrollLocked || hasCompletedTimeline) return;
-    const handleWheel = (e: WheelEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-      setScrollLockProgress(prev => {
-        const delta = e.deltaY > 0 ? 0.018 : -0.018;
-        const newProgress = Math.max(0, Math.min(1, prev + delta));
-
-        // Release lock when reaching either end
-        if (newProgress >= 0.99 && delta > 0 && prev < 0.99) {
-          setHasCompletedTimeline(true);
-          setIsScrollLocked(false);
-        } else if (newProgress <= 0.01 && delta < 0 && prev > 0.01) {
-          setIsScrollLocked(false);
-        }
-        return newProgress;
-      });
-    };
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
-        e.preventDefault();
-        setScrollLockProgress(prev => {
-          const newProgress = Math.min(1, prev + 0.05);
-          if (newProgress >= 0.99 && prev < 0.99) {
-            setHasCompletedTimeline(true);
-            setIsScrollLocked(false);
-          }
-          return newProgress;
-        });
-      } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
-        e.preventDefault();
-        setScrollLockProgress(prev => {
-          const newProgress = Math.max(0, prev - 0.05);
-          if (newProgress <= 0.01 && prev > 0.01) {
-            setIsScrollLocked(false);
-          }
-          return newProgress;
-        });
-      }
-    };
-    let touchStartY = 0;
-    const handleTouchStart = (e: TouchEvent) => {
-      touchStartY = e.touches[0].clientY;
-    };
-    const handleTouchMove = (e: TouchEvent) => {
+    const handleScroll = () => {
       if (!timelineRef.current) return;
+      
       const rect = timelineRef.current.getBoundingClientRect();
-      const isInTimeline = rect.top <= window.innerHeight * 0.5 && rect.bottom >= window.innerHeight * 0.5;
-      if (isInTimeline) {
-        e.preventDefault();
-        const touchY = e.touches[0].clientY;
-        const delta = (touchStartY - touchY) * 0.002;
-        setScrollLockProgress(prev => {
-          const newProgress = Math.max(0, Math.min(1, prev + delta));
-          if (newProgress >= 0.99 && prev < 0.99) {
-            setHasCompletedTimeline(true);
-            setIsScrollLocked(false);
-          }
-          return newProgress;
+      const windowHeight = window.innerHeight;
+      
+      // Calculate progress based on section position
+      // Progress = 0 when section top is at viewport bottom
+      // Progress = 1 when section bottom is at viewport top
+      const sectionTop = rect.top;
+      const sectionHeight = rect.height;
+      
+      // When section top reaches top of viewport, start progress
+      // When section bottom reaches top of viewport, end progress
+      const progress = Math.max(0, Math.min(1, -sectionTop / (sectionHeight - windowHeight)));
+      
+      setSectionProgress(progress);
+    };
+
+    let ticking = false;
+    const throttledScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
         });
-        touchStartY = touchY;
+        ticking = true;
       }
     };
-    window.addEventListener('wheel', handleWheel, {
-      passive: false
-    });
-    window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('touchstart', handleTouchStart, {
-      passive: true
-    });
-    window.addEventListener('touchmove', handleTouchMove, {
-      passive: false
-    });
-    return () => {
-      window.removeEventListener('wheel', handleWheel);
-      window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('touchstart', handleTouchStart);
-      window.removeEventListener('touchmove', handleTouchMove);
-    };
-  }, [isScrollLocked, hasCompletedTimeline]);
 
-  // Use scrollLockProgress when locked, otherwise use regular scroll
-  useEffect(() => {
-    if (isScrollLocked) {
-      setSectionProgress(scrollLockProgress);
-    } else if (!hasCompletedTimeline) {
-      // Regular scroll-based progression
-      const handleScroll = () => {
-        if (!timelineRef.current) return;
-        const rect = timelineRef.current.getBoundingClientRect();
-        const windowHeight = window.innerHeight;
-        const elementTop = rect.top;
-        const elementHeight = rect.height;
-        const startScroll = elementTop - windowHeight * 0.8;
-        const endScroll = elementTop + elementHeight - windowHeight * 0.3;
-        const scrollRange = endScroll - startScroll;
-        const progress = Math.max(0, Math.min(1, -startScroll / scrollRange));
-        setSectionProgress(progress);
-      };
-      let ticking = false;
-      const throttledScroll = () => {
-        if (!ticking) {
-          window.requestAnimationFrame(() => {
-            handleScroll();
-            ticking = false;
-          });
-          ticking = true;
-        }
-      };
-      window.addEventListener('scroll', throttledScroll, {
-        passive: true
-      });
-      handleScroll();
-      return () => window.removeEventListener('scroll', throttledScroll);
-    }
-  }, [isScrollLocked, scrollLockProgress, hasCompletedTimeline]);
+    window.addEventListener('scroll', throttledScroll, { passive: true });
+    handleScroll(); // Initial calculation
+    
+    return () => window.removeEventListener('scroll', throttledScroll);
+  }, []);
   const stats = [{
     icon: Package,
     value: 10,
@@ -242,13 +141,12 @@ const About = () => {
     details: ["Advanced Industry 4.0 implementation", "ECG 7-color printing technology", "AGV automation integration"]
   }];
 
-  // Dynamic section height based on number of cards
-  const timelineHeight = Math.min(40 + timeline.length * 40, 140);
-
   // Calculate active card index
   const numCards = timeline.length;
   const activeCardIndex = Math.floor(sectionProgress * numCards);
-  return <section id="about" ref={sectionRef} className="py-20 bg-background">
+  
+  return (
+    <section id="about" ref={sectionRef} className="py-20 bg-background">
       <div className="container mx-auto px-4 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16 animate-fade-in">
@@ -302,139 +200,147 @@ const About = () => {
             }}>
                   {stat.label}
                 </div>
-              </div>;
+              </div>
         })}
         </div>
 
-        {/* Timeline Section */}
-        <div className="mt-20" ref={timelineRef} style={{
-        minHeight: `${timelineHeight}vh`
-      }}>
-          <h3 className="text-4xl md:text-5xl font-bold text-center mb-20 text-foreground animate-fade-in">
-            Our Journey
-          </h3>
-          
-          {/* Sticky Container for Stacked Cards */}
-          <div className="relative max-w-5xl mx-auto">
-            {/* Center Line */}
-            <div className="absolute left-1/2 transform -translate-x-1/2 top-0 hidden md:block" style={{
-            width: '2px',
-            height: '60vh',
-            background: 'linear-gradient(180deg, hsl(var(--primary) / 0.3), hsl(var(--accent) / 0.5), hsl(var(--primary) / 0.3))'
-          }}>
-              {/* Animated Growing Line */}
-              <div className="absolute top-0 left-0 right-0" style={{
-              height: `${sectionProgress * 100}%`,
-              background: 'linear-gradient(180deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary)))',
-              boxShadow: '0 0 20px hsl(var(--primary) / 0.5), 0 0 40px hsl(var(--accent) / 0.3)',
-              transition: 'height 0.15s linear'
-            }} />
-              
-              {/* Glowing Dot at Line Tip */}
-              <div className="absolute left-1/2 transform -translate-x-1/2" style={{
-              top: `${sectionProgress * 100}%`,
-              width: '12px',
-              height: '12px',
-              borderRadius: '50%',
-              background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))',
-              boxShadow: '0 0 20px hsl(var(--primary)), 0 0 40px hsl(var(--accent) / 0.5)',
-              transition: 'top 0.15s linear'
-            }} />
+        {/* Timeline Section - Full Section Scroll Lock */}
+        <div className="mt-20 relative" ref={timelineRef} style={{
+          height: `${(timeline.length + 1) * 100}vh`
+        }}>
+          {/* Sticky Container - Locks in Viewport */}
+          <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden">
+            {/* Header */}
+            <div className="absolute top-12 left-0 right-0 text-center z-50">
+              <h3 className="text-4xl md:text-5xl font-bold text-foreground animate-fade-in">
+                Our Journey
+              </h3>
             </div>
 
-            {/* Sticky Stage for Cards */}
-            <div className="sticky top-[15vh] h-[60vh] flex items-center justify-center">
-              {timeline.map((item, index) => {
-              const Icon = item.icon;
-              const isLeft = index % 2 === 0;
+            {/* Progress Indicator */}
+            <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex items-center gap-2 z-50">
+              {timeline.map((_, idx) => (
+                <div
+                  key={idx}
+                  className="transition-all duration-300"
+                  style={{
+                    width: activeCardIndex === idx ? '32px' : '8px',
+                    height: '8px',
+                    borderRadius: '4px',
+                    backgroundColor: activeCardIndex >= idx 
+                      ? 'hsl(var(--primary))' 
+                      : 'hsl(var(--primary) / 0.2)',
+                    boxShadow: activeCardIndex === idx 
+                      ? '0 0 16px hsl(var(--primary))' 
+                      : 'none'
+                  }}
+                />
+              ))}
+            </div>
 
-              // Calculate active index and transition progress
-              const numCards = timeline.length;
-              const rawProgress = sectionProgress * numCards;
-              const activeIndex = Math.floor(rawProgress);
-              const localProgress = rawProgress % 1;
-
-              // Depth from active card (for stacking effect)
-              const depth = activeIndex - index;
-
-              // Card visibility and animation logic
-              let opacity = 0;
-              let translateX = isLeft ? -120 : 120;
-              let translateY = 0;
-              let scale = 0.96;
-              let zIndex = 100 + index;
-              let pointerEvents = 'auto' as 'auto' | 'none';
-              let ariaHidden = true;
-              let visibility = 'visible' as 'visible' | 'hidden';
-
-              // Enhanced styling classes
-              let cardClasses = "group relative p-6 md:px-8 md:py-10 rounded-2xl border-2 transition-all duration-500";
+            {/* Center Line */}
+            <div className="absolute left-1/2 transform -translate-x-1/2 top-1/2 -translate-y-1/2 hidden md:block" style={{
+              width: '2px',
+              height: '50vh',
+              background: 'linear-gradient(180deg, hsl(var(--primary) / 0.3), hsl(var(--accent) / 0.5), hsl(var(--primary) / 0.3))'
+            }}>
+              {/* Animated Growing Line */}
+              <div className="absolute top-0 left-0 right-0" style={{
+                height: `${(sectionProgress * numCards % 1) * 100}%`,
+                background: 'linear-gradient(180deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary)))',
+                boxShadow: '0 0 20px hsl(var(--primary) / 0.5), 0 0 40px hsl(var(--accent) / 0.3)',
+                transition: 'height 0.1s linear'
+              }} />
               
-              if (index < activeIndex - 1) {
-                // Cards far in the past - hidden
-                opacity = 0;
-                visibility = 'hidden';
-                pointerEvents = 'none';
-                translateX = 0;
-                translateY = 50;
-                scale = 0.9;
-                cardClasses += " bg-gradient-to-br from-background to-primary/5 border-primary/10 shadow-lg";
-              } else if (index === activeIndex - 1) {
-                // Previous card - visible with reduced opacity for smooth backward transition
-                opacity = 0.3;
-                translateX = 0;
-                translateY = 10;
-                scale = 0.98;
-                pointerEvents = 'none';
-                ariaHidden = true;
-                visibility = 'visible';
-                cardClasses += " bg-gradient-to-br from-background to-primary/5 border-primary/10 shadow-lg";
-              } else if (index === activeIndex) {
-                // Current active card - animating out when scrolling forward, in when scrolling backward
-                // When localProgress increases (scrolling forward), card stays at center
-                // When localProgress decreases (scrolling backward), card becomes fully visible
-                opacity = 1;
-                translateX = 0;
-                translateY = 0;
-                scale = 1;
-                pointerEvents = 'auto';
-                ariaHidden = false;
-                visibility = 'visible';
-                zIndex = 100 + activeIndex + 10; // Higher z-index for active card
-                cardClasses += " bg-gradient-to-br from-background to-primary/5 border-primary/15 shadow-2xl ring-1 ring-primary/20";
-              } else if (index === activeIndex + 1) {
-                // Next card - smoothly animating in from the side
-                // localProgress 0 -> 1: card moves from side to center
-                opacity = localProgress;
-                translateX = (isLeft ? -120 : 120) * (1 - localProgress);
-                translateY = 0;
-                scale = 0.96 + 0.04 * localProgress;
-                pointerEvents = 'none';
-                ariaHidden = true;
-                visibility = 'visible';
-                zIndex = 100 + activeIndex + 5; // Medium z-index
-                cardClasses += " bg-gradient-to-br from-background to-primary/5 border-primary/15 shadow-xl";
-              } else {
-                // Future cards - completely hidden
-                opacity = 0;
-                visibility = 'hidden';
-                pointerEvents = 'none';
-                translateX = isLeft ? -120 : 120;
-                translateY = 0;
-                scale = 0.96;
-                cardClasses += " bg-gradient-to-br from-background to-primary/5 border-primary/10 shadow-lg";
-              }
-              const transitionDuration = prefersReducedMotion ? '0s' : '0.5s';
-              return <div key={index} className="absolute w-full md:w-1/2 px-4" style={{
-                opacity,
-                transform: `translateX(${translateX}px) translateY(${translateY}px) scale(${scale})`,
-                transition: `opacity ${transitionDuration} cubic-bezier(0.4, 0, 0.2, 1), transform ${transitionDuration} cubic-bezier(0.4, 0, 0.2, 1)`,
-                zIndex,
-                [isLeft ? 'left' : 'right']: 0,
-                pointerEvents,
-                visibility,
-                willChange: 'transform, opacity'
-              }} aria-hidden={ariaHidden}>
+              {/* Glowing Dot */}
+              <div className="absolute left-1/2 transform -translate-x-1/2" style={{
+                top: `${(sectionProgress * numCards % 1) * 100}%`,
+                width: '12px',
+                height: '12px',
+                borderRadius: '50%',
+                background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))',
+                boxShadow: '0 0 20px hsl(var(--primary)), 0 0 40px hsl(var(--accent) / 0.5)',
+                transition: 'top 0.1s linear'
+              }} />
+            </div>
+
+            {/* Cards Container */}
+            <div className="relative w-full max-w-5xl h-full flex items-center justify-center px-4">
+              {timeline.map((item, index) => {
+                const Icon = item.icon;
+                const isLeft = index % 2 === 0;
+
+                // Calculate active index and transition progress
+                const rawProgress = sectionProgress * numCards;
+                const activeIndex = Math.floor(rawProgress);
+                const localProgress = rawProgress % 1;
+
+                // Professional card state logic
+                let opacity = 0;
+                let translateX = 0;
+                let translateY = 0;
+                let scale = 1;
+                let zIndex = 50;
+                let pointerEvents: 'auto' | 'none' = 'none';
+                let visibility: 'visible' | 'hidden' = 'hidden';
+
+                // Card classes
+                let cardClasses = "group relative p-6 md:px-8 md:py-10 rounded-2xl border-2";
+
+                if (index < activeIndex) {
+                  // Past cards - completely hidden
+                  opacity = 0;
+                  visibility = 'hidden';
+                  translateX = isLeft ? -100 : 100;
+                  scale = 0.9;
+                  cardClasses += " bg-gradient-to-br from-background to-primary/5 border-primary/10";
+                } else if (index === activeIndex) {
+                  // Active card - fully visible and interactive
+                  // When scrolling forward (localProgress > 0), start exit animation
+                  const exitProgress = localProgress;
+                  opacity = 1 - exitProgress * 0.6;
+                  translateX = (isLeft ? -50 : 50) * exitProgress;
+                  scale = 1 - exitProgress * 0.05;
+                  zIndex = 100;
+                  pointerEvents = 'auto';
+                  visibility = 'visible';
+                  cardClasses += " bg-gradient-to-br from-background to-primary/5 border-primary/20 shadow-2xl ring-1 ring-primary/30";
+                } else if (index === activeIndex + 1) {
+                  // Next card - entering from side
+                  const entryProgress = localProgress;
+                  opacity = entryProgress;
+                  translateX = (isLeft ? -120 : 120) * (1 - entryProgress);
+                  scale = 0.9 + 0.1 * entryProgress;
+                  zIndex = 90;
+                  visibility = 'visible';
+                  cardClasses += " bg-gradient-to-br from-background to-primary/5 border-primary/15 shadow-xl";
+                } else {
+                  // Future cards - hidden off-screen
+                  opacity = 0;
+                  visibility = 'hidden';
+                  translateX = isLeft ? -120 : 120;
+                  scale = 0.9;
+                  cardClasses += " bg-gradient-to-br from-background to-primary/5 border-primary/10";
+                }
+
+                const transitionDuration = prefersReducedMotion ? '0s' : '0.4s';
+                const easing = 'cubic-bezier(0.4, 0, 0.2, 1)';
+
+                return (
+                  <div
+                    key={index}
+                    className="absolute w-full md:w-1/2 px-4"
+                    style={{
+                      opacity,
+                      transform: `translateX(${translateX}px) translateY(${translateY}px) scale(${scale})`,
+                      transition: `opacity ${transitionDuration} ${easing}, transform ${transitionDuration} ${easing}`,
+                      zIndex,
+                      [isLeft ? 'left' : 'right']: 0,
+                      pointerEvents,
+                      visibility,
+                      willChange: 'transform, opacity'
+                    }}
+                  >
                     <div className={cardClasses}>
                       {/* Year */}
                       <div className={`${isLeft ? '' : 'md:text-right'} mb-4`}>
@@ -463,12 +369,14 @@ const About = () => {
                           </li>)}
                       </ul>
                     </div>
-                  </div>;
-            })}
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
       </div>
-    </section>;
+    </section>
+  );
 };
 export default About;
