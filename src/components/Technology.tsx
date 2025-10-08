@@ -48,9 +48,7 @@ const Technology = () => {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   </div>}
                 <CardContent className="p-8 text-center">
-                  <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-primary/10 to-accent/10 mb-6 group-hover:scale-110 transition-transform duration-300">
-                    <feature.icon className={`w-10 h-10 ${feature.color}`} />
-                  </div>
+                  
                   <h3 className="text-xl md:text-2xl font-bold mb-4 text-foreground group-hover:text-primary transition-colors">
                     {feature.title}
                   </h3>
