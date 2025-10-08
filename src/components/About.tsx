@@ -263,7 +263,7 @@ const About = () => {
           <h3 className="text-4xl md:text-5xl font-bold text-center mb-20 text-foreground animate-fade-in">
             Our Journey
           </h3>
-          <div className="relative max-w-[1400px] mx-auto timeline-container">
+          <div className="relative max-w-5xl mx-auto timeline-container">
             {/* Scroll-Based Progressive Vertical Line */}
             <div 
               className="absolute left-1/2 transform -translate-x-1/2 top-0 hidden md:block"
@@ -300,7 +300,7 @@ const About = () => {
             </div>
             
             {/* Timeline Items */}
-            <div className="space-y-24 md:space-y-32">
+            <div className="space-y-12 md:space-y-16">
               {timeline.map((item, index) => {
                 const Icon = item.icon;
                 const isLeft = index % 2 === 0;
@@ -316,7 +316,7 @@ const About = () => {
                   >
                     {/* Content Card with 3D Stacked Animation */}
                     <div 
-                      className={`w-full md:w-1/2 mb-8 md:mb-0 timeline-card-wrapper`}
+                      className={`w-full md:w-[40%] mb-8 md:mb-0 timeline-card-wrapper`}
                       style={{
                         opacity: isCardVisible ? 1 : 0,
                         transform: isCardVisible 
@@ -328,30 +328,30 @@ const About = () => {
                         zIndex: isCardVisible ? 10 - index : 0,
                       }}
                     >
-                      <div className="group relative bg-card p-8 md:p-10 rounded-xl border shadow-sm transition-all duration-500 hover:-translate-y-1" style={{ transformStyle: 'preserve-3d' }}>
+                      <div className="group relative bg-card p-5 md:p-6 rounded-lg border shadow-sm transition-all duration-500 hover:-translate-y-1" style={{ transformStyle: 'preserve-3d' }}>
                         
                         {/* Year */}
-                        <div className={`${isLeft ? '' : 'md:float-right'} mb-4`}
+                        <div className={`${isLeft ? '' : 'md:text-right'} mb-3`}
                           style={{
                             opacity: isCardVisible ? 1 : 0,
                             transform: isCardVisible ? 'translateY(0)' : 'translateY(-10px)',
                             transition: `all 0.4s ease-out ${index * 0.2 + 0.2}s`,
                           }}
                         >
-                          <span className="text-sm font-medium text-muted-foreground">{item.year}</span>
+                          <span className="text-4xl md:text-5xl font-bold text-foreground">{item.year}</span>
                         </div>
 
                         {/* Event Title */}
-                        <h4 className={`text-xl md:text-2xl font-bold mb-6 text-foreground ${isLeft ? 'text-left' : 'md:text-right'} clear-both`}>
+                        <h4 className={`text-lg md:text-xl font-bold mb-4 text-foreground ${isLeft ? 'text-left' : 'md:text-right'}`}>
                           {item.event}
                         </h4>
 
                         {/* Details List with Sequential Fade In */}
-                        <ul className={`space-y-3 ${isLeft ? 'text-left' : 'md:text-right'}`}>
+                        <ul className={`space-y-2 ${isLeft ? 'text-left' : 'md:text-right'}`}>
                           {item.details.map((detail, idx) => (
                             <li 
                               key={idx} 
-                              className="text-muted-foreground text-sm md:text-base leading-relaxed"
+                              className="text-muted-foreground text-xs md:text-sm leading-relaxed"
                               style={{
                                 opacity: isCardVisible ? 1 : 0,
                                 transform: isCardVisible ? 'translateY(0)' : 'translateY(10px)',
@@ -379,7 +379,7 @@ const About = () => {
                       className={`hidden md:block absolute top-1/2 ${isLeft ? 'left-1/2 ml-10' : 'right-1/2 mr-10'} h-0.5 bg-gradient-to-r ${isLeft ? 'from-primary via-accent to-transparent' : 'from-transparent via-accent to-primary'}`}
                       style={{
                         opacity: isCardVisible ? 1 : 0,
-                        width: isCardVisible ? '48px' : '0px',
+                        width: isCardVisible ? '32px' : '0px',
                         transition: `all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) ${index * 0.2 + 0.4}s`,
                         boxShadow: isCardVisible ? `0 0 10px hsl(var(--primary) / 0.5)` : 'none',
                         transformOrigin: isLeft ? 'left' : 'right',
