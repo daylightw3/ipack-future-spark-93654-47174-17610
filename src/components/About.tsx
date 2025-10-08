@@ -260,7 +260,7 @@ const About = () => {
 
         {/* Timeline Section */}
         <div className="mt-20" ref={timelineRef}>
-          <h3 className="text-4xl md:text-5xl font-bold text-center mb-20 bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent animate-fade-in">
+          <h3 className="text-4xl md:text-5xl font-bold text-center mb-20 text-foreground animate-fade-in">
             Our Journey
           </h3>
           <div className="relative max-w-[1400px] mx-auto timeline-container">
