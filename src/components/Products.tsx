@@ -86,30 +86,7 @@ const Products = () => {
         </div>
 
         {/* Package Formats */}
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12">
-            <h3 className="text-2xl md:text-3xl font-bold mb-3 text-foreground">
-              Available Package Formats
-            </h3>
-            <p className="text-muted-foreground">
-              Choose from our diverse range of sizes to perfectly fit your product needs
-            </p>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-            {formats.map((format, index) => <div key={format.name} className="group relative backdrop-blur-sm bg-white/90 rounded-2xl p-6 hover-lift animate-fade-in text-center shadow-md border-2 border-transparent hover:border-primary/20 transition-all duration-300" style={{
-            animationDelay: `${index * 0.1}s`
-          }}>
-                {/* Gradient Border on Hover */}
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity -z-10" />
-                
-                <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <div className="w-6 h-8 border-2 border-primary rounded-sm" />
-                </div>
-                <h4 className="text-lg md:text-xl font-bold text-primary mb-2 group-hover:scale-105 transition-transform">{format.name}</h4>
-                <p className="text-sm md:text-base text-muted-foreground font-medium">{format.size}</p>
-              </div>)}
-          </div>
-        </div>
+        
       </div>
     </section>;
 };
