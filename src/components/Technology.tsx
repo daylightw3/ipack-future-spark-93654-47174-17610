@@ -4,11 +4,6 @@ import factoryAgv from "@/assets/factory-agv.jpg";
 import factoryQuality from "@/assets/factory-quality.jpg";
 const Technology = () => {
   const features = [{
-    icon: Gauge,
-    title: "Extended Color Gamut (7-Color)",
-    description: "Advanced ECG printing technology delivering vibrant, consistent colors across all packaging designs",
-    color: "text-primary"
-  }, {
     icon: Bot,
     title: "Automated Guided Vehicles (AGV)",
     description: "State-of-the-art AGV logistics system for seamless material handling and warehouse automation",
@@ -40,7 +35,7 @@ const Technology = () => {
         </div>
 
         {/* Features Grid */}
-        <div className="grid md:grid-cols-3 gap-8 mb-20">
+        <div className="grid md:grid-cols-2 gap-8 lg:gap-12 mb-20 max-w-5xl mx-auto">
           {features.map((feature, index) => <div key={feature.title} className="group animate-scale-in" style={{
           animationDelay: `${index * 0.1}s`
         }}>

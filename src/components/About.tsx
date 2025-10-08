@@ -104,9 +104,11 @@ const About = () => {
         const delta = e.deltaY > 0 ? 0.018 : -0.018;
         const newProgress = Math.max(0, Math.min(1, prev + delta));
         
-        // Check if completed
-        if (newProgress >= 0.99 && prev < 0.99) {
+        // Release lock when reaching either end
+        if (newProgress >= 0.99 && delta > 0 && prev < 0.99) {
           setHasCompletedTimeline(true);
+          setIsScrollLocked(false);
+        } else if (newProgress <= 0.01 && delta < 0 && prev > 0.01) {
           setIsScrollLocked(false);
         }
         
@@ -117,10 +119,23 @@ const About = () => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
         e.preventDefault();
-        setScrollLockProgress(prev => Math.min(1, prev + 0.05));
+        setScrollLockProgress(prev => {
+          const newProgress = Math.min(1, prev + 0.05);
+          if (newProgress >= 0.99 && prev < 0.99) {
+            setHasCompletedTimeline(true);
+            setIsScrollLocked(false);
+          }
+          return newProgress;
+        });
       } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
         e.preventDefault();
-        setScrollLockProgress(prev => Math.max(0, prev - 0.05));
+        setScrollLockProgress(prev => {
+          const newProgress = Math.max(0, prev - 0.05);
+          if (newProgress <= 0.01 && prev > 0.01) {
+            setIsScrollLocked(false);
+          }
+          return newProgress;
+        });
       }
     };
 
@@ -419,6 +434,7 @@ const About = () => {
                 let zIndex = 100 + index;
                 let pointerEvents = 'auto' as 'auto' | 'none';
                 let ariaHidden = true;
+                let visibility = 'visible' as 'visible' | 'hidden';
                 
                 // Enhanced styling classes
                 let cardClasses = "group relative p-6 md:px-8 md:py-10 rounded-2xl border-2 transition-all duration-500";
@@ -431,6 +447,7 @@ const About = () => {
                   scale = Math.max(1 - depth * 0.02, 0.92);
                   pointerEvents = 'none';
                   ariaHidden = true;
+                  visibility = 'visible';
                   cardClasses += " bg-gradient-to-br from-background to-primary/5 border-primary/10 shadow-lg";
                 } else if (index === activeIndex) {
                   // Current active card - highlighted
@@ -440,6 +457,7 @@ const About = () => {
                   scale = 1;
                   pointerEvents = 'auto';
                   ariaHidden = false;
+                  visibility = 'visible';
                   cardClasses += " bg-gradient-to-br from-background to-primary/5 border-primary/15 shadow-2xl ring-1 ring-primary/20";
                 } else if (index === activeIndex + 1) {
                   // Next card - animating in
@@ -449,9 +467,13 @@ const About = () => {
                   scale = 0.96 + (0.04 * localProgress);
                   pointerEvents = 'none';
                   ariaHidden = true;
+                  visibility = 'visible';
                   cardClasses += " bg-gradient-to-br from-background to-primary/5 border-primary/15 shadow-xl";
                 } else {
-                  // Future cards - hidden
+                  // Future cards - completely hidden
+                  opacity = 0;
+                  visibility = 'hidden';
+                  pointerEvents = 'none';
                   cardClasses += " bg-gradient-to-br from-background to-primary/5 border-primary/10 shadow-lg";
                 }
                 
@@ -468,6 +490,7 @@ const About = () => {
                       zIndex,
                       [isLeft ? 'left' : 'right']: 0,
                       pointerEvents,
+                      visibility,
                     }}
                     aria-hidden={ariaHidden}
                   >

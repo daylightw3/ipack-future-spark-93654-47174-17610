@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
+import logo from "@/assets/ipack-logo-transparent.png";
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -51,7 +52,7 @@ const Header = () => {
             e.preventDefault();
             scrollToSection("#home");
           }} className="flex items-center gap-3 group transition-all">
-              <img src="/src/assets/ipack-logo-new.png" alt="ipack - Closer to You" className="h-10 md:h-12 w-auto transition-transform group-hover:scale-105" />
+              <img src={logo} alt="ipack - Closer to You" className="h-10 md:h-12 w-auto transition-transform group-hover:scale-105" />
               <div className="hidden md:flex flex-col">
                 
               </div>
