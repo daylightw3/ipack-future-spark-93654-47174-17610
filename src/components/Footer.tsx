@@ -2,17 +2,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { MapPin, Phone, Mail, Linkedin, Facebook, Instagram } from "lucide-react";
-
 const Footer = () => {
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+      element.scrollIntoView({
+        behavior: "smooth"
+      });
     }
   };
-
-  return (
-    <footer id="contact" className="bg-foreground text-white">
+  return <footer id="contact" className="bg-foreground text-white">
       {/* Contact Section */}
       <div className="container mx-auto px-4 lg:px-8 py-14">
         <div className="grid lg:grid-cols-2 gap-12 mb-16">
@@ -39,7 +38,7 @@ const Footer = () => {
                 <Phone className="w-6 h-6 text-accent flex-shrink-0 mt-1" />
                 <div>
                   <p className="font-semibold mb-1">Phone</p>
-                  <p className="text-white/70">+971 XX XXX XXXX</p>
+                  <p className="text-white/70">+971 2 55 11 878</p>
                 </div>
               </div>
 
@@ -59,25 +58,13 @@ const Footer = () => {
               <h3 className="text-2xl md:text-3xl font-bold mb-6">Send us a Message</h3>
               <form className="space-y-5">
                 <div>
-                  <Input
-                    type="text"
-                    placeholder="Your Name"
-                    className="bg-white/10 border-white/30 text-white placeholder:text-white/60 h-12 rounded-xl focus:border-accent focus:ring-accent"
-                  />
+                  <Input type="text" placeholder="Your Name" className="bg-white/10 border-white/30 text-white placeholder:text-white/60 h-12 rounded-xl focus:border-accent focus:ring-accent" />
                 </div>
                 <div>
-                  <Input
-                    type="email"
-                    placeholder="Your Email"
-                    className="bg-white/10 border-white/30 text-white placeholder:text-white/60 h-12 rounded-xl focus:border-accent focus:ring-accent"
-                  />
+                  <Input type="email" placeholder="Your Email" className="bg-white/10 border-white/30 text-white placeholder:text-white/60 h-12 rounded-xl focus:border-accent focus:ring-accent" />
                 </div>
                 <div>
-                  <Textarea
-                    placeholder="Your Message"
-                    rows={5}
-                    className="bg-white/10 border-white/30 text-white placeholder:text-white/60 resize-none rounded-xl focus:border-accent focus:ring-accent"
-                  />
+                  <Textarea placeholder="Your Message" rows={5} className="bg-white/10 border-white/30 text-white placeholder:text-white/60 resize-none rounded-xl focus:border-accent focus:ring-accent" />
                 </div>
                 <Button className="w-full bg-gradient-to-r from-accent to-accent/90 hover:from-accent/90 hover:to-accent text-foreground font-bold text-lg py-6 rounded-xl shadow-lg hover:shadow-accent/30 transition-all duration-300 hover:scale-[1.02]">
                   Send Message
@@ -95,11 +82,7 @@ const Footer = () => {
             {/* Logo and Mission */}
             <div className="text-center md:text-left">
               <div className="flex flex-col items-center md:items-start gap-3">
-                <img 
-                  src="/ipack-logo-transparent.png" 
-                  alt="ipack - Closer to You" 
-                  className="h-14 md:h-16 w-auto transition-transform duration-300 hover:scale-105"
-                />
+                <img src="/ipack-logo-transparent.png" alt="ipack - Closer to You" className="h-14 md:h-16 w-auto transition-transform duration-300 hover:scale-105" />
                 <div className="text-sm text-white/70 font-semibold tracking-wide">Closer to You</div>
               </div>
               <p className="text-white/60 text-sm mt-3 leading-relaxed max-w-xs">
@@ -109,50 +92,29 @@ const Footer = () => {
 
             {/* Quick Links */}
             <div className="flex flex-wrap justify-center gap-6">
-              <button
-                onClick={() => scrollToSection("#home")}
-                className="text-sm text-white/70 hover:text-white transition-colors"
-              >
+              <button onClick={() => scrollToSection("#home")} className="text-sm text-white/70 hover:text-white transition-colors">
                 Home
               </button>
-              <button
-                onClick={() => scrollToSection("#about")}
-                className="text-sm text-white/70 hover:text-white transition-colors"
-              >
+              <button onClick={() => scrollToSection("#about")} className="text-sm text-white/70 hover:text-white transition-colors">
                 About
               </button>
-              <button
-                onClick={() => scrollToSection("#products")}
-                className="text-sm text-white/70 hover:text-white transition-colors"
-              >
+              <button onClick={() => scrollToSection("#products")} className="text-sm text-white/70 hover:text-white transition-colors">
                 Products
               </button>
-              <button
-                onClick={() => scrollToSection("#technology")}
-                className="text-sm text-white/70 hover:text-white transition-colors"
-              >
+              <button onClick={() => scrollToSection("#technology")} className="text-sm text-white/70 hover:text-white transition-colors">
                 Technology
               </button>
             </div>
 
             {/* Social Links */}
             <div className="flex gap-4">
-              <a
-                href="#"
-                className="group w-12 h-12 rounded-full bg-white/10 border border-white/20 flex items-center justify-center hover:bg-gradient-to-br hover:from-primary hover:to-accent hover:border-transparent transition-all duration-300 hover:scale-110"
-              >
+              <a href="#" className="group w-12 h-12 rounded-full bg-white/10 border border-white/20 flex items-center justify-center hover:bg-gradient-to-br hover:from-primary hover:to-accent hover:border-transparent transition-all duration-300 hover:scale-110">
                 <Linkedin className="w-6 h-6 group-hover:scale-110 transition-transform" />
               </a>
-              <a
-                href="#"
-                className="group w-12 h-12 rounded-full bg-white/10 border border-white/20 flex items-center justify-center hover:bg-gradient-to-br hover:from-primary hover:to-accent hover:border-transparent transition-all duration-300 hover:scale-110"
-              >
+              <a href="#" className="group w-12 h-12 rounded-full bg-white/10 border border-white/20 flex items-center justify-center hover:bg-gradient-to-br hover:from-primary hover:to-accent hover:border-transparent transition-all duration-300 hover:scale-110">
                 <Facebook className="w-6 h-6 group-hover:scale-110 transition-transform" />
               </a>
-              <a
-                href="#"
-                className="group w-12 h-12 rounded-full bg-white/10 border border-white/20 flex items-center justify-center hover:bg-gradient-to-br hover:from-primary hover:to-accent hover:border-transparent transition-all duration-300 hover:scale-110"
-              >
+              <a href="#" className="group w-12 h-12 rounded-full bg-white/10 border border-white/20 flex items-center justify-center hover:bg-gradient-to-br hover:from-primary hover:to-accent hover:border-transparent transition-all duration-300 hover:scale-110">
                 <Instagram className="w-6 h-6 group-hover:scale-110 transition-transform" />
               </a>
             </div>
@@ -163,8 +125,6 @@ const Footer = () => {
           </div>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
-
 export default Footer;
