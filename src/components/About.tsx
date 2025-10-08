@@ -36,12 +36,9 @@ const useCountAnimation = (end: number, duration: number = 2000, isVisible: bool
 
 const About = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const [visibleCards, setVisibleCards] = useState<number[]>([]);
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [sectionProgress, setSectionProgress] = useState(0);
   const sectionRef = useRef<HTMLDivElement>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
-  const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   // Main section visibility observer
   useEffect(() => {
@@ -61,37 +58,23 @@ const About = () => {
     return () => observer.disconnect();
   }, []);
 
-  // Scroll-based line progression and active card tracking
+  // Scroll-based progression
   useEffect(() => {
     const handleScroll = () => {
       if (!timelineRef.current) return;
       
       const rect = timelineRef.current.getBoundingClientRect();
-      const scrollTop = window.scrollY || window.pageYOffset;
-      const elementTop = rect.top + scrollTop;
-      const elementHeight = rect.height;
       const windowHeight = window.innerHeight;
+      const elementTop = rect.top;
+      const elementHeight = rect.height;
       
-      // Calculate how much of the timeline section is scrolled
-      const scrolled = scrollTop + windowHeight - elementTop;
-      const progress = Math.max(0, Math.min(100, (scrolled / (elementHeight + windowHeight * 0.5)) * 100));
+      // Calculate progress from 0 to 1 based on scroll position
+      const startScroll = elementTop - windowHeight * 0.8;
+      const endScroll = elementTop + elementHeight - windowHeight * 0.3;
+      const scrollRange = endScroll - startScroll;
+      const progress = Math.max(0, Math.min(1, -startScroll / scrollRange));
       
-      setScrollProgress(progress);
-
-      // Track which card is active at the sticky position
-      const stickTop = windowHeight * 0.2;
-      let newActiveIndex = 0;
-      
-      itemRefs.current.forEach((item, index) => {
-        if (item) {
-          const itemRect = item.getBoundingClientRect();
-          if (itemRect.top <= stickTop && itemRect.bottom > stickTop) {
-            newActiveIndex = index;
-          }
-        }
-      });
-      
-      setActiveIndex(newActiveIndex);
+      setSectionProgress(progress);
     };
 
     // Throttle scroll events for performance
@@ -111,31 +94,6 @@ const About = () => {
     
     return () => window.removeEventListener('scroll', throttledScroll);
   }, []);
-
-  // Card visibility observer with staggered reveal
-  useEffect(() => {
-    if (!isVisible) return;
-    
-    const cardObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const index = parseInt(entry.target.getAttribute('data-index') || '0');
-            // Stagger the card visibility
-            setTimeout(() => {
-              setVisibleCards(prev => [...new Set([...prev, index])]);
-            }, index * 150);
-          }
-        });
-      },
-      { threshold: 0.2, rootMargin: '-50px' }
-    );
-
-    const cards = document.querySelectorAll('.timeline-card');
-    cards.forEach(card => cardObserver.observe(card));
-
-    return () => cardObserver.disconnect();
-  }, [isVisible]);
 
   const stats = [
     { icon: Package, value: 10, suffix: "B+", label: "Packs Sold by 2022", color: "text-primary" },
@@ -276,17 +234,19 @@ const About = () => {
         </div>
 
         {/* Timeline Section */}
-        <div className="mt-20" ref={timelineRef}>
+        <div className="mt-20" ref={timelineRef} style={{ minHeight: '180vh' }}>
           <h3 className="text-4xl md:text-5xl font-bold text-center mb-20 text-foreground animate-fade-in">
             Our Journey
           </h3>
-          <div className="relative max-w-5xl mx-auto timeline-container">
-            {/* Scroll-Based Progressive Vertical Line */}
+          
+          {/* Sticky Container for Stacked Cards */}
+          <div className="relative max-w-5xl mx-auto">
+            {/* Center Line */}
             <div 
               className="absolute left-1/2 transform -translate-x-1/2 top-0 hidden md:block"
               style={{
                 width: '2px',
-                height: '100%',
+                height: '60vh',
                 background: 'linear-gradient(180deg, hsl(var(--primary) / 0.3), hsl(var(--accent) / 0.5), hsl(var(--primary) / 0.3))',
               }}
             >
@@ -294,10 +254,10 @@ const About = () => {
               <div 
                 className="absolute top-0 left-0 right-0"
                 style={{
-                  height: `${scrollProgress}%`,
+                  height: `${sectionProgress * 100}%`,
                   background: 'linear-gradient(180deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary)))',
                   boxShadow: '0 0 20px hsl(var(--primary) / 0.5), 0 0 40px hsl(var(--accent) / 0.3)',
-                  transition: 'height 0.1s linear',
+                  transition: 'height 0.15s linear',
                 }}
               />
               
@@ -305,104 +265,98 @@ const About = () => {
               <div 
                 className="absolute left-1/2 transform -translate-x-1/2"
                 style={{
-                  top: `${scrollProgress}%`,
+                  top: `${sectionProgress * 100}%`,
                   width: '12px',
                   height: '12px',
                   borderRadius: '50%',
                   background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))',
                   boxShadow: '0 0 20px hsl(var(--primary)), 0 0 40px hsl(var(--accent) / 0.5)',
-                  transition: 'top 0.1s linear',
+                  transition: 'top 0.15s linear',
                 }}
               />
             </div>
-            
-            {/* Timeline Items */}
-            <div className="space-y-12 md:space-y-16">
+
+            {/* Sticky Stage for Cards */}
+            <div className="sticky top-[15vh] h-[60vh] flex items-center justify-center">
               {timeline.map((item, index) => {
                 const Icon = item.icon;
                 const isLeft = index % 2 === 0;
-                const isCardVisible = visibleCards.includes(index);
+                
+                // Calculate active index and transition progress
+                const numCards = timeline.length;
+                const activeIndex = Math.floor(sectionProgress * numCards);
+                const localProgress = (sectionProgress * numCards) % 1;
+                
+                // Card visibility and animation logic
+                let opacity = 0;
+                let translateX = isLeft ? -100 : 100;
+                let translateY = 0;
+                let scale = 0.98;
+                let zIndex = 100 + index;
+                
+                if (index < activeIndex) {
+                  // Past cards - stacked underneath
+                  opacity = 0.35;
+                  translateX = 0;
+                  translateY = 6;
+                  scale = 0.96;
+                } else if (index === activeIndex) {
+                  // Current active card
+                  opacity = 1;
+                  translateX = 0;
+                  translateY = 0;
+                  scale = 1;
+                } else if (index === activeIndex + 1) {
+                  // Next card - animating in
+                  opacity = localProgress;
+                  translateX = (isLeft ? -100 : 100) * (1 - localProgress);
+                  translateY = 0;
+                  scale = 0.98 + (0.02 * localProgress);
+                }
                 
                 return (
                   <div
                     key={index}
-                    ref={(el) => (itemRefs.current[index] = el)}
-                    data-index={index}
-                    className={`timeline-card relative flex items-center justify-center ${
-                      isLeft ? "md:flex-row" : "md:flex-row-reverse"
-                    } flex-col min-h-[60vh] md:min-h-[70vh]`}
+                    className="absolute w-full md:w-1/2 px-4"
+                    style={{
+                      opacity,
+                      transform: `translateX(${translateX}px) translateY(${translateY}px) scale(${scale})`,
+                      transition: 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
+                      zIndex,
+                      [isLeft ? 'left' : 'right']: 0,
+                    }}
                   >
-                    {/* Content Card with Sticky Stacked Animation */}
-                    <div 
-                      className={`w-full md:w-1/2 mb-8 md:mb-0 timeline-card-wrapper ${isLeft ? 'md:pr-12' : 'md:pl-12'} md:sticky md:top-[20vh]`}
-                      style={{
-                        opacity: index === activeIndex ? 1 : index < activeIndex ? 0 : 0,
-                        transform: index === activeIndex 
-                          ? "translateX(0) translateY(0) scale(1)" 
-                          : index < activeIndex
-                            ? "translateX(0) translateY(-20px) scale(0.95)"
-                            : `translateX(${isLeft ? '-80px' : '80px'}) translateY(20px) scale(0.95)`,
-                        transition: `all 0.5s cubic-bezier(0.4, 0, 0.2, 1)`,
-                        willChange: 'transform, opacity',
-                        zIndex: 100 + index,
-                      }}
-                    >
-                      <div className="group relative bg-card p-5 md:p-6 rounded-lg border shadow-sm transition-all duration-500 hover:-translate-y-1" style={{ transformStyle: 'preserve-3d' }}>
-                        
-                        {/* Year */}
-                        <div className={`${isLeft ? '' : 'md:text-right'} mb-3`}
-                          style={{
-                            opacity: isCardVisible ? 1 : 0,
-                            transform: isCardVisible ? 'translateY(0)' : 'translateY(-10px)',
-                            transition: `all 0.4s ease-out ${index * 0.2 + 0.2}s`,
-                          }}
-                        >
-                          <span className="text-4xl md:text-5xl font-bold text-foreground">{item.year}</span>
-                        </div>
-
-                        {/* Event Title */}
-                        <h4 className={`text-lg md:text-xl font-bold mb-4 text-foreground ${isLeft ? 'text-left' : 'md:text-right'}`}>
-                          {item.event}
-                        </h4>
-
-                        {/* Details List with Sequential Fade In */}
-                        <ul className={`space-y-2 ${isLeft ? 'text-left' : 'md:text-right'}`}>
-                          {item.details.map((detail, idx) => (
-                            <li 
-                              key={idx} 
-                              className="text-muted-foreground text-xs md:text-sm leading-relaxed"
-                              style={{
-                                opacity: isCardVisible ? 1 : 0,
-                                transform: isCardVisible ? 'translateY(0)' : 'translateY(10px)',
-                                transition: `all 0.5s ease-out ${index * 0.2 + 0.4 + idx * 0.1}s`,
-                              }}
-                            >
-                              {detail}
-                            </li>
-                          ))}
-                        </ul>
+                    <div className="group relative bg-card p-6 md:p-8 rounded-2xl border-2 shadow-lg hover:shadow-xl transition-all duration-500">
+                      {/* Year */}
+                      <div className={`${isLeft ? '' : 'md:text-right'} mb-4`}>
+                        <span className="text-5xl md:text-6xl font-bold text-foreground">{item.year}</span>
                       </div>
+
+                      {/* Icon */}
+                      <div className={`flex ${isLeft ? 'justify-start' : 'md:justify-end'} mb-4`}>
+                        <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center">
+                          <Icon className="w-7 h-7 text-primary" />
+                        </div>
+                      </div>
+
+                      {/* Event Title */}
+                      <h4 className={`text-xl md:text-2xl font-bold mb-4 text-foreground ${isLeft ? 'text-left' : 'md:text-right'}`}>
+                        {item.event}
+                      </h4>
+
+                      {/* Details List */}
+                      <ul className={`space-y-2 ${isLeft ? 'text-left' : 'md:text-right'}`}>
+                        {item.details.map((detail, idx) => (
+                          <li key={idx} className="text-muted-foreground text-sm md:text-base leading-relaxed">
+                            • {detail}
+                          </li>
+                        ))}
+                      </ul>
                     </div>
 
                     {/* Center Dot */}
                     <div 
-                      className="absolute left-1/2 -translate-x-1/2 z-10 hidden md:block w-3 h-3 rounded-full border bg-background"
-                      style={{
-                        opacity: isCardVisible ? 1 : 0,
-                        transition: `opacity 0.6s ease-out ${index * 0.2}s`,
-                      }}
-                    />
-
-                    {/* Animated Connection Line Drawing Effect */}
-                    <div 
-                      className={`hidden md:block absolute top-1/2 ${isLeft ? 'left-1/2 ml-10' : 'right-1/2 mr-10'} h-0.5 bg-gradient-to-r ${isLeft ? 'from-primary via-accent to-transparent' : 'from-transparent via-accent to-primary'}`}
-                      style={{
-                        opacity: isCardVisible ? 1 : 0,
-                        width: isCardVisible ? '32px' : '0px',
-                        transition: `all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) ${index * 0.2 + 0.4}s`,
-                        boxShadow: isCardVisible ? `0 0 10px hsl(var(--primary) / 0.5)` : 'none',
-                        transformOrigin: isLeft ? 'left' : 'right',
-                      }}
+                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 hidden md:block w-4 h-4 rounded-full border-2 border-primary bg-background shadow-lg"
                     />
                   </div>
                 );
