@@ -11,7 +11,7 @@ const Hero = () => {
   };
   return <>
       {/* Professional Large Interactive Avatar Frame */}
-      <section id="home" className="relative min-h-[85vh] py-6 md:py-8 overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
+      <section id="home" className="relative min-h-[calc(100vh-5rem)] lg:min-h-[calc(100vh-6rem)] pt-20 lg:pt-24 py-6 md:py-8 overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
         <div className="container mx-auto px-4 lg:px-8 h-full">
           <div className="max-w-7xl mx-auto h-full flex items-center justify-center animate-fade-in">
             {/* Professional Frame Container */}
