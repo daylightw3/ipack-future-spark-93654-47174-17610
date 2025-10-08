@@ -316,7 +316,7 @@ const About = () => {
                   >
                     {/* Content Card with 3D Stacked Animation */}
                     <div 
-                      className={`w-full md:w-[48%] ${isLeft ? "md:pr-12" : "md:pl-12"} mb-8 md:mb-0 timeline-card-wrapper`}
+                      className={`w-full md:w-1/2 mb-8 md:mb-0 timeline-card-wrapper`}
                       style={{
                         opacity: isCardVisible ? 1 : 0,
                         transform: isCardVisible 
@@ -328,19 +328,17 @@ const About = () => {
                         zIndex: isCardVisible ? 10 - index : 0,
                       }}
                     >
-                      <div className="group relative bg-background p-8 md:p-10 rounded-2xl border-2 border-primary/20 hover:border-primary/30 shadow-lg hover:shadow-xl transition-all duration-500 hover:-translate-y-1" style={{ transformStyle: 'preserve-3d' }}>
+                      <div className="group relative bg-card p-8 md:p-10 rounded-xl border shadow-sm transition-all duration-500 hover:-translate-y-1" style={{ transformStyle: 'preserve-3d' }}>
                         
-                        {/* Year Badge with Bounce Animation */}
-                        <div 
-                          className={`inline-block px-6 py-3 bg-gradient-to-r from-primary to-accent text-white font-bold text-xl md:text-2xl rounded-full mb-6 shadow-md ${isLeft ? '' : 'md:float-right'}`}
+                        {/* Year */}
+                        <div className={`${isLeft ? '' : 'md:float-right'} mb-4`}
                           style={{
-                            transform: isCardVisible ? 'translateY(0) scale(1)' : 'translateY(-20px) scale(0.8)',
                             opacity: isCardVisible ? 1 : 0,
-                            transition: `all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) ${index * 0.2 + 0.3}s`,
-                            boxShadow: isCardVisible ? '0 4px 20px hsl(var(--primary) / 0.5)' : '0 0 0 hsl(var(--primary) / 0)',
+                            transform: isCardVisible ? 'translateY(0)' : 'translateY(-10px)',
+                            transition: `all 0.4s ease-out ${index * 0.2 + 0.2}s`,
                           }}
                         >
-                          {item.year}
+                          <span className="text-sm font-medium text-muted-foreground">{item.year}</span>
                         </div>
 
                         {/* Event Title */}
@@ -367,43 +365,14 @@ const About = () => {
                       </div>
                     </div>
 
-                    {/* Center Dot with Progressive Scale and Pulse */}
+                    {/* Center Dot */}
                     <div 
-                      className="absolute left-1/2 transform -translate-x-1/2 z-10 hidden md:block"
+                      className="absolute left-1/2 -translate-x-1/2 z-10 hidden md:block w-3 h-3 rounded-full border bg-background"
                       style={{
                         opacity: isCardVisible ? 1 : 0,
-                        transform: isCardVisible ? 'scale(1) rotate(0deg)' : 'scale(0) rotate(-180deg)',
-                        transition: `all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) ${index * 0.2}s`,
+                        transition: `opacity 0.6s ease-out ${index * 0.2}s`,
                       }}
-                    >
-                      <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-primary to-accent shadow-2xl flex items-center justify-center transition-transform duration-300 hover:scale-125 cursor-pointer">
-                        {/* Multiple Pulse Rings */}
-                        <div 
-                          className="absolute inset-0 rounded-full bg-primary opacity-30"
-                          style={{
-                            animation: isCardVisible ? 'ping 2s cubic-bezier(0, 0, 0.2, 1) infinite' : 'none',
-                          }}
-                        />
-                        <div 
-                          className="absolute inset-0 rounded-full bg-accent opacity-20"
-                          style={{
-                            animation: isCardVisible ? 'ping 2s cubic-bezier(0, 0, 0.2, 1) infinite 1s' : 'none',
-                          }}
-                        />
-                        
-                        {/* Glow Effect */}
-                        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/50 to-accent/50 blur-md" />
-                        
-                        {/* Icon with Rotation */}
-                        <Icon 
-                          className="w-10 h-10 text-white relative z-10"
-                          style={{
-                            transform: isCardVisible ? 'rotate(0deg)' : 'rotate(-360deg)',
-                            transition: `transform 1s cubic-bezier(0.34, 1.56, 0.64, 1) ${index * 0.2 + 0.2}s`,
-                          }}
-                        />
-                      </div>
-                    </div>
+                    />
 
                     {/* Animated Connection Line Drawing Effect */}
                     <div 
