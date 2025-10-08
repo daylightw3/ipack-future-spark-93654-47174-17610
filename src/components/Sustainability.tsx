@@ -21,7 +21,7 @@ const Sustainability = () => {
   ];
 
   return (
-    <section id="sustainability" className="py-20 bg-gradient-to-br from-accent/5 via-background to-accent/10 relative overflow-hidden">
+    <section id="sustainability" className="py-14 bg-gradient-to-br from-accent/5 via-background to-accent/10 relative overflow-hidden">
       {/* Decorative Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-72 h-72 bg-accent/10 rounded-full blur-3xl" />
@@ -30,7 +30,7 @@ const Sustainability = () => {
       
       <div className="container mx-auto px-4 lg:px-8 relative z-10">
         {/* Header */}
-        <div className="text-center mb-16 animate-fade-in">
+        <div className="text-center mb-12 animate-fade-in">
           <div className="inline-flex items-center gap-2 bg-accent/10 rounded-full px-6 py-2 mb-4">
             <Leaf className="w-5 h-5 text-accent" />
             <span className="text-accent font-semibold text-sm tracking-wide uppercase">
@@ -47,7 +47,7 @@ const Sustainability = () => {
         </div>
 
         {/* Initiatives */}
-        <div className="grid md:grid-cols-3 gap-8 mb-16">
+        <div className="grid md:grid-cols-3 gap-8 mb-12">
           {initiatives.map((initiative, index) => (
             <div
               key={initiative.title}
@@ -58,7 +58,7 @@ const Sustainability = () => {
                 {/* Gradient Glow */}
                 <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-accent/5 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
                 
-                <CardContent className="p-10 text-center">
+                <CardContent className="p-8 text-center">
                   <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-accent/10 to-accent/20 mb-6 group-hover:scale-110 transition-transform duration-300">
                     <initiative.icon className="w-12 h-12 text-accent" />
                   </div>

@@ -14,7 +14,7 @@ const Footer = () => {
   return (
     <footer id="contact" className="bg-foreground text-white">
       {/* Contact Section */}
-      <div className="container mx-auto px-4 lg:px-8 py-20">
+      <div className="container mx-auto px-4 lg:px-8 py-14">
         <div className="grid lg:grid-cols-2 gap-12 mb-16">
           {/* Left - Company Info */}
           <div className="animate-fade-in">
@@ -55,9 +55,9 @@ const Footer = () => {
 
           {/* Right - Contact Form */}
           <div className="animate-scale-in">
-            <div className="backdrop-blur-md bg-white/10 rounded-3xl p-8 md:p-10 border border-white/20 shadow-2xl hover:shadow-accent/20 transition-all duration-300">
-              <h3 className="text-2xl md:text-3xl font-bold mb-8">Send us a Message</h3>
-              <form className="space-y-6">
+            <div className="backdrop-blur-md bg-white/10 rounded-3xl p-6 md:p-8 border border-white/20 shadow-2xl hover:shadow-accent/20 transition-all duration-300">
+              <h3 className="text-2xl md:text-3xl font-bold mb-6">Send us a Message</h3>
+              <form className="space-y-5">
                 <div>
                   <Input
                     type="text"

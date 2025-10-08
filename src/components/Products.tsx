@@ -32,10 +32,10 @@ const Products = () => {
     name: "IFA-Fino",
     size: "125ml - 250ml"
   }];
-  return <section id="products" className="py-20 bg-gradient-to-b from-secondary via-secondary to-background">
+  return <section id="products" className="py-14 bg-gradient-to-b from-secondary via-secondary to-background">
       <div className="container mx-auto px-4 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-16 animate-fade-in">
+        <div className="text-center mb-12 animate-fade-in">
           
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-foreground">
             Flexible and Customizable Packaging Solutions
@@ -56,14 +56,14 @@ const Products = () => {
         </div>
 
         {/* Hero Portfolio Image */}
-        <div className="mb-16 animate-scale-in">
+        <div className="mb-12 animate-scale-in">
           <div className="rounded-3xl overflow-hidden shadow-2xl">
             <img src={productPortfolio} alt="ipack Product Portfolio - Complete Range" className="w-full h-auto" />
           </div>
         </div>
 
         {/* Product Grid */}
-        <div className="grid md:grid-cols-2 gap-8 mb-20 max-w-5xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-8 mb-14 max-w-5xl mx-auto">
           {products.map((product, index) => <div key={product.title} className="group relative animate-scale-in" style={{
           animationDelay: `${index * 0.1}s`
         }}>
@@ -75,7 +75,7 @@ const Products = () => {
                   <img src={product.image} alt={product.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 </div>
-                <CardContent className="p-8">
+                <CardContent className="p-6">
                   <h3 className="text-xl md:text-2xl font-bold mb-3 text-foreground group-hover:text-primary transition-colors">
                     {product.title}
                   </h3>
@@ -96,7 +96,7 @@ const Products = () => {
             </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-            {formats.map((format, index) => <div key={format.name} className="group relative backdrop-blur-sm bg-white/90 rounded-2xl p-8 hover-lift animate-fade-in text-center shadow-md border-2 border-transparent hover:border-primary/20 transition-all duration-300" style={{
+            {formats.map((format, index) => <div key={format.name} className="group relative backdrop-blur-sm bg-white/90 rounded-2xl p-6 hover-lift animate-fade-in text-center shadow-md border-2 border-transparent hover:border-primary/20 transition-all duration-300" style={{
             animationDelay: `${index * 0.1}s`
           }}>
                 {/* Gradient Border on Hover */}

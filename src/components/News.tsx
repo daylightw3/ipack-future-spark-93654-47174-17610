@@ -8,10 +8,10 @@ const News = () => {
   ];
 
   return (
-    <section id="news" className="py-20 bg-gradient-to-b from-white via-secondary/30 to-white">
+    <section id="news" className="py-14 bg-gradient-to-b from-white via-secondary/30 to-white">
       <div className="container mx-auto px-4 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-16 animate-fade-in">
+        <div className="text-center mb-12 animate-fade-in">
           <div className="inline-flex items-center gap-2 bg-accent/10 rounded-full px-6 py-2 mb-4">
             <span className="text-accent font-semibold text-sm tracking-wide uppercase">
               Media & Recognition
@@ -30,7 +30,7 @@ const News = () => {
           {partners.map((partner, index) => (
             <div
               key={partner.name}
-              className="group relative backdrop-blur-sm bg-white/90 rounded-2xl p-8 hover:-translate-y-2 border-2 border-primary/10 hover:border-primary/30 shadow-lg hover:shadow-xl hover:shadow-primary/10 transition-all duration-300 animate-fade-in"
+              className="group relative backdrop-blur-sm bg-white/90 rounded-2xl p-6 hover:-translate-y-2 border-2 border-primary/10 hover:border-primary/30 shadow-lg hover:shadow-xl hover:shadow-primary/10 transition-all duration-300 animate-fade-in"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               {/* Gradient Glow on Hover */}

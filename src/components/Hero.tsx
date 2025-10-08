@@ -11,11 +11,11 @@ const Hero = () => {
   };
   return <>
       {/* Professional Large Interactive Avatar Frame */}
-      <section id="home" className="relative min-h-[90vh] py-8 md:py-12 overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
+      <section id="home" className="relative min-h-[85vh] py-6 md:py-8 overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
         <div className="container mx-auto px-4 lg:px-8 h-full">
           <div className="max-w-7xl mx-auto h-full flex items-center justify-center animate-fade-in">
             {/* Professional Frame Container */}
-            <div className="relative w-full h-[85vh] rounded-3xl overflow-hidden backdrop-blur-sm bg-background/50 border-2 border-primary/30 shadow-2xl hover:shadow-primary/30 transition-all duration-500">
+            <div className="relative w-full h-[80vh] rounded-3xl overflow-hidden backdrop-blur-sm bg-background/50 border-2 border-primary/30 shadow-2xl hover:shadow-primary/30 transition-all duration-500">
               {/* Gradient Border Glow */}
               <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 blur-xl -z-10 animate-pulse" />
               
@@ -32,7 +32,7 @@ const Hero = () => {
       </section>
 
       {/* Content Section Below Avatar */}
-      <section className="relative py-24 overflow-hidden bg-gradient-to-b from-background via-background to-primary/5">
+      <section className="relative py-16 overflow-hidden bg-gradient-to-b from-background via-background to-primary/5">
         {/* Decorative Background Elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-pulse" />
@@ -44,11 +44,11 @@ const Hero = () => {
         <div className="container mx-auto px-4 lg:px-8 relative z-10">
           <div className="max-w-5xl mx-auto">
             {/* Premium Glass Container */}
-            <div className="relative backdrop-blur-sm bg-background/80 border border-primary/20 rounded-3xl p-12 md:p-16 shadow-2xl hover:shadow-primary/20 transition-all duration-500">
+            <div className="relative backdrop-blur-sm bg-background/80 border border-primary/20 rounded-3xl p-8 md:p-12 shadow-2xl hover:shadow-primary/20 transition-all duration-500">
               {/* Gradient Border Glow Effect */}
               <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 blur-xl -z-10" />
               
-              <div className="space-y-10 text-center">
+              <div className="space-y-8 text-center">
                 {/* Animated Tagline */}
                 <div className="animate-fade-in">
                   <p className="inline-block text-primary font-bold text-lg tracking-widest uppercase px-6 py-2 bg-primary/10 rounded-full border border-primary/30">

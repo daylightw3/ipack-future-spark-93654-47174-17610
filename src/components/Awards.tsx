@@ -10,10 +10,10 @@ const Awards = () => {
   ];
 
   return (
-    <section className="py-20 bg-gradient-to-br from-primary/5 via-accent/5 to-primary/5">
+    <section className="py-14 bg-gradient-to-br from-primary/5 via-accent/5 to-primary/5">
       <div className="container mx-auto px-4 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-16 animate-fade-in">
+        <div className="text-center mb-12 animate-fade-in">
           <div className="inline-flex items-center gap-2 bg-primary/10 rounded-full px-6 py-2 mb-4">
             <Award className="w-5 h-5 text-primary" />
             <span className="text-primary font-semibold text-sm tracking-wide uppercase">
@@ -28,9 +28,9 @@ const Awards = () => {
           </p>
         </div>
 
-        <div className="mb-20">
+        <div className="mb-14">
           {/* PRIME Award - Featured */}
-          <div className="max-w-6xl mx-auto relative backdrop-blur-sm bg-gradient-to-br from-white via-white to-primary/5 rounded-3xl p-10 lg:p-16 shadow-2xl hover:shadow-primary/20 transition-all duration-500 hover:-translate-y-2 border-2 border-primary/20">
+          <div className="max-w-6xl mx-auto relative backdrop-blur-sm bg-gradient-to-br from-white via-white to-primary/5 rounded-3xl p-8 lg:p-12 shadow-2xl hover:shadow-primary/20 transition-all duration-500 hover:-translate-y-2 border-2 border-primary/20">
             {/* Gradient Glow Effect */}
             <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 blur-2xl opacity-0 hover:opacity-100 transition-opacity duration-500 -z-10" />
             
@@ -83,7 +83,7 @@ const Awards = () => {
           {certifications.map((cert, index) => (
             <div
               key={cert.name}
-              className="group relative backdrop-blur-sm bg-white/90 rounded-2xl p-8 text-center hover:-translate-y-2 border-2 border-primary/10 hover:border-primary/30 shadow-lg hover:shadow-xl hover:shadow-primary/10 transition-all duration-300 animate-fade-in"
+              className="group relative backdrop-blur-sm bg-white/90 rounded-2xl p-6 text-center hover:-translate-y-2 border-2 border-primary/10 hover:border-primary/30 shadow-lg hover:shadow-xl hover:shadow-primary/10 transition-all duration-300 animate-fade-in"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               {/* Gradient Glow */}

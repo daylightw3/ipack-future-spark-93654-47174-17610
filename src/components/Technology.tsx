@@ -16,10 +16,10 @@ const Technology = () => {
     color: "text-primary",
     image: factoryQuality
   }];
-  return <section id="technology" className="py-20 bg-gradient-to-b from-background via-white to-background">
+  return <section id="technology" className="py-14 bg-gradient-to-b from-background via-white to-background">
       <div className="container mx-auto px-4 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-16 animate-fade-in">
+        <div className="text-center mb-12 animate-fade-in">
           <div className="inline-flex items-center gap-2 bg-accent/10 rounded-full px-6 py-2 mb-4">
             <BarChart3 className="w-5 h-5 text-accent" />
             <span className="text-accent font-semibold text-sm tracking-wide uppercase">
@@ -35,7 +35,7 @@ const Technology = () => {
         </div>
 
         {/* Features Grid */}
-        <div className="grid md:grid-cols-2 gap-8 lg:gap-12 mb-20 max-w-5xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
           {features.map((feature, index) => <div key={feature.title} className="group animate-scale-in" style={{
           animationDelay: `${index * 0.1}s`
         }}>
@@ -47,7 +47,7 @@ const Technology = () => {
                     <img src={feature.image} alt={feature.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   </div>}
-                <CardContent className="p-8 text-center">
+                <CardContent className="p-6 text-center">
                   
                   <h3 className="text-xl md:text-2xl font-bold mb-4 text-foreground group-hover:text-primary transition-colors">
                     {feature.title}
@@ -60,15 +60,6 @@ const Technology = () => {
             </div>)}
         </div>
 
-        {/* Award Highlight */}
-        <div className="max-w-5xl mx-auto">
-          <Card className="relative overflow-hidden bg-gradient-to-br from-primary via-primary/90 to-accent text-white border-none shadow-2xl animate-scale-in hover:-translate-y-2 transition-all duration-500">
-            {/* Animated Background Gradient */}
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/80 via-accent/80 to-primary/80 opacity-0 hover:opacity-100 transition-opacity duration-500" />
-            
-            
-          </Card>
-        </div>
       </div>
     </section>;
 };
