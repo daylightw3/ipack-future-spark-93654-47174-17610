@@ -209,63 +209,68 @@ const About = () => {
           height: `${(timeline.length + 1) * 100}vh`
         }}>
           {/* Sticky Container - Locks in Viewport */}
-          <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden">
-            {/* Header */}
-            <div className="absolute top-12 left-0 right-0 text-center z-50">
-              <h3 className="text-4xl md:text-5xl font-bold text-foreground animate-fade-in">
-                Our Journey
-              </h3>
+          <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-background/50 via-background to-background/50">
+            {/* Clean Header with Subtle Decoration */}
+            <div className="absolute top-16 left-0 right-0 text-center z-50">
+              <div className="inline-flex flex-col items-center gap-3">
+                <div className="w-16 h-1 bg-gradient-to-r from-transparent via-primary to-transparent rounded-full"></div>
+                <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-tight">
+                  Our Journey
+                </h3>
+                <p className="text-sm text-muted-foreground">Milestones of Innovation</p>
+              </div>
             </div>
 
-            {/* Progress Indicator */}
-            <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex items-center gap-2 z-50">
-              {timeline.map((_, idx) => (
-                <div
-                  key={idx}
-                  className="transition-all duration-300"
-                  style={{
-                    width: activeCardIndex === idx ? '32px' : '8px',
-                    height: '8px',
-                    borderRadius: '4px',
-                    backgroundColor: activeCardIndex >= idx 
-                      ? 'hsl(var(--primary))' 
-                      : 'hsl(var(--primary) / 0.2)',
-                    boxShadow: activeCardIndex === idx 
-                      ? '0 0 16px hsl(var(--primary))' 
-                      : 'none'
-                  }}
-                />
-              ))}
+            {/* Modern Progress Indicator */}
+            <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 z-50">
+              <div className="flex items-center gap-3 px-6 py-3 backdrop-blur-xl bg-white/60 dark:bg-foreground/20 rounded-full border border-primary/10 shadow-lg">
+                {timeline.map((_, idx) => (
+                  <div
+                    key={idx}
+                    className="transition-all duration-500 ease-out"
+                    style={{
+                      width: activeCardIndex === idx ? '40px' : '10px',
+                      height: '10px',
+                      borderRadius: '5px',
+                      backgroundColor: activeCardIndex >= idx 
+                        ? 'hsl(var(--primary))' 
+                        : 'hsl(var(--muted-foreground) / 0.2)',
+                      boxShadow: activeCardIndex === idx 
+                        ? '0 0 20px hsl(var(--primary) / 0.4)' 
+                        : 'none'
+                    }}
+                  />
+                ))}
+              </div>
             </div>
 
-            {/* Center Line */}
-            <div className="absolute left-1/2 transform -translate-x-1/2 top-1/2 -translate-y-1/2 hidden md:block" style={{
-              width: '2px',
-              height: '50vh',
-              background: 'linear-gradient(180deg, hsl(var(--primary) / 0.3), hsl(var(--accent) / 0.5), hsl(var(--primary) / 0.3))'
+            {/* Minimal Center Line */}
+            <div className="absolute left-1/2 transform -translate-x-1/2 top-1/2 -translate-y-1/2 hidden lg:block" style={{
+              width: '1px',
+              height: '60vh',
+              background: 'linear-gradient(180deg, transparent, hsl(var(--border)), transparent)'
             }}>
-              {/* Animated Growing Line */}
+              {/* Smooth Growing Line */}
               <div className="absolute top-0 left-0 right-0" style={{
                 height: `${(sectionProgress * numCards % 1) * 100}%`,
-                background: 'linear-gradient(180deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary)))',
-                boxShadow: '0 0 20px hsl(var(--primary) / 0.5), 0 0 40px hsl(var(--accent) / 0.3)',
-                transition: 'height 0.1s linear'
+                background: 'linear-gradient(180deg, hsl(var(--primary) / 0.3), hsl(var(--primary)))',
+                transition: 'height 0.15s ease-out'
               }} />
               
-              {/* Glowing Dot */}
+              {/* Minimal Glowing Indicator */}
               <div className="absolute left-1/2 transform -translate-x-1/2" style={{
                 top: `${(sectionProgress * numCards % 1) * 100}%`,
-                width: '12px',
-                height: '12px',
+                width: '8px',
+                height: '8px',
                 borderRadius: '50%',
-                background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))',
-                boxShadow: '0 0 20px hsl(var(--primary)), 0 0 40px hsl(var(--accent) / 0.5)',
-                transition: 'top 0.1s linear'
+                background: 'hsl(var(--primary))',
+                boxShadow: '0 0 16px hsl(var(--primary) / 0.6)',
+                transition: 'top 0.15s ease-out'
               }} />
             </div>
 
-            {/* Cards Container */}
-            <div className="relative w-full max-w-5xl h-full flex items-center justify-center px-4">
+            {/* Cards Container - Cleaner Layout */}
+            <div className="relative w-full max-w-6xl h-full flex items-center justify-center px-6">
               {timeline.map((item, index) => {
                 const Icon = item.icon;
                 const isLeft = index % 2 === 0;
@@ -275,7 +280,7 @@ const About = () => {
                 const activeIndex = Math.floor(rawProgress);
                 const localProgress = rawProgress % 1;
 
-                // Professional card state logic
+                // Ultra-smooth card state logic
                 let opacity = 0;
                 let translateX = 0;
                 let translateY = 0;
@@ -283,91 +288,109 @@ const About = () => {
                 let zIndex = 50;
                 let pointerEvents: 'auto' | 'none' = 'none';
                 let visibility: 'visible' | 'hidden' = 'hidden';
-
-                // Card classes
-                let cardClasses = "group relative p-6 md:px-8 md:py-10 rounded-2xl border-2";
+                let blur = 0;
 
                 if (index < activeIndex) {
-                  // Past cards - completely hidden
+                  // Past cards - fade out smoothly
                   opacity = 0;
                   visibility = 'hidden';
-                  translateX = isLeft ? -100 : 100;
-                  scale = 0.9;
-                  cardClasses += " bg-gradient-to-br from-background to-primary/5 border-primary/10";
+                  translateX = isLeft ? -80 : 80;
+                  translateY = -20;
+                  scale = 0.92;
+                  blur = 4;
                 } else if (index === activeIndex) {
-                  // Active card - fully visible and interactive
-                  // When scrolling forward (localProgress > 0), start exit animation
+                  // Active card - crystal clear and centered
                   const exitProgress = localProgress;
-                  opacity = 1 - exitProgress * 0.6;
-                  translateX = (isLeft ? -50 : 50) * exitProgress;
-                  scale = 1 - exitProgress * 0.05;
+                  const smoothExit = exitProgress * exitProgress; // Ease-in for smoother start
+                  
+                  opacity = 1 - smoothExit * 0.5;
+                  translateX = (isLeft ? -60 : 60) * smoothExit;
+                  translateY = 15 * smoothExit;
+                  scale = 1 - smoothExit * 0.08;
+                  blur = smoothExit * 2;
                   zIndex = 100;
                   pointerEvents = 'auto';
                   visibility = 'visible';
-                  cardClasses += " bg-gradient-to-br from-background to-primary/5 border-primary/20 shadow-2xl ring-1 ring-primary/30";
                 } else if (index === activeIndex + 1) {
-                  // Next card - entering from side
+                  // Next card - smooth entrance
                   const entryProgress = localProgress;
-                  opacity = entryProgress;
-                  translateX = (isLeft ? -120 : 120) * (1 - entryProgress);
-                  scale = 0.9 + 0.1 * entryProgress;
+                  const smoothEntry = 1 - Math.pow(1 - entryProgress, 2); // Ease-out for smoother end
+                  
+                  opacity = smoothEntry * 0.5;
+                  translateX = (isLeft ? -100 : 100) * (1 - smoothEntry);
+                  translateY = -15 * (1 - smoothEntry);
+                  scale = 0.88 + 0.12 * smoothEntry;
+                  blur = (1 - smoothEntry) * 4;
                   zIndex = 90;
-                  visibility = 'visible';
-                  cardClasses += " bg-gradient-to-br from-background to-primary/5 border-primary/15 shadow-xl";
+                  visibility = entryProgress > 0.05 ? 'visible' : 'hidden';
                 } else {
-                  // Future cards - hidden off-screen
+                  // Future cards - off-screen
                   opacity = 0;
                   visibility = 'hidden';
-                  translateX = isLeft ? -120 : 120;
-                  scale = 0.9;
-                  cardClasses += " bg-gradient-to-br from-background to-primary/5 border-primary/10";
+                  translateX = isLeft ? -100 : 100;
+                  translateY = -20;
+                  scale = 0.88;
+                  blur = 4;
                 }
 
-                const transitionDuration = prefersReducedMotion ? '0s' : '0.4s';
-                const easing = 'cubic-bezier(0.4, 0, 0.2, 1)';
+                const transitionDuration = prefersReducedMotion ? '0s' : '0.6s';
+                const easing = 'cubic-bezier(0.34, 1.56, 0.64, 1)'; // Smooth bounce
 
                 return (
                   <div
                     key={index}
-                    className="absolute w-full md:w-1/2 px-4"
+                    className="absolute w-full lg:w-[48%] px-2"
                     style={{
                       opacity,
                       transform: `translateX(${translateX}px) translateY(${translateY}px) scale(${scale})`,
-                      transition: `opacity ${transitionDuration} ${easing}, transform ${transitionDuration} ${easing}`,
+                      filter: `blur(${blur}px)`,
+                      transition: `all ${transitionDuration} ${easing}`,
                       zIndex,
-                      [isLeft ? 'left' : 'right']: 0,
+                      [isLeft ? 'left' : 'right']: '0',
                       pointerEvents,
                       visibility,
-                      willChange: 'transform, opacity'
+                      willChange: 'transform, opacity, filter'
                     }}
                   >
-                    <div className={cardClasses}>
-                      {/* Year */}
-                      <div className={`${isLeft ? '' : 'md:text-right'} mb-4`}>
-                        <span className="text-5xl md:text-6xl font-bold bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent">
-                          {item.year}
-                        </span>
-                      </div>
-
-                      {/* Icon */}
-                      <div className={`flex ${isLeft ? 'justify-start' : 'md:justify-end'} mb-6`}>
-                        <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                          <Icon className="w-8 h-8 text-primary" />
+                    <div className="relative backdrop-blur-sm bg-white/95 dark:bg-foreground/95 rounded-3xl border border-primary/10 shadow-xl overflow-hidden">
+                      {/* Subtle Gradient Overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.02] to-accent/[0.02] pointer-events-none" />
+                      
+                      {/* Content */}
+                      <div className="relative p-8 md:p-10">
+                        {/* Year Badge */}
+                        <div className={`flex ${isLeft ? 'justify-start' : 'lg:justify-end'} mb-6`}>
+                          <div className="inline-flex items-center gap-3 px-4 py-2 bg-gradient-to-r from-primary/10 to-accent/10 rounded-full border border-primary/20">
+                            <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                            <span className="text-2xl md:text-3xl font-bold text-primary">
+                              {item.year}
+                            </span>
+                          </div>
                         </div>
+
+                        {/* Icon + Title Row */}
+                        <div className={`flex items-center gap-4 mb-6 ${isLeft ? '' : 'lg:flex-row-reverse'}`}>
+                          <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center shadow-inner">
+                            <Icon className="w-7 h-7 text-primary" />
+                          </div>
+                          <h4 className="flex-1 text-xl md:text-2xl font-bold text-foreground leading-tight">
+                            {item.event}
+                          </h4>
+                        </div>
+
+                        {/* Clean Details List */}
+                        <ul className={`space-y-3 ${isLeft ? '' : 'lg:text-right'}`}>
+                          {item.details.map((detail, idx) => (
+                            <li key={idx} className={`flex items-start gap-3 text-muted-foreground text-sm md:text-base ${isLeft ? '' : 'lg:flex-row-reverse lg:text-right'}`}>
+                              <span className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-primary mt-2" />
+                              <span className="flex-1 leading-relaxed">{detail}</span>
+                            </li>
+                          ))}
+                        </ul>
                       </div>
 
-                      {/* Event Title */}
-                      <h4 className={`text-xl md:text-2xl font-bold mb-6 text-foreground ${isLeft ? 'text-left' : 'md:text-right'}`}>
-                        {item.event}
-                      </h4>
-
-                      {/* Details List */}
-                      <ul className={`space-y-3 ${isLeft ? 'text-left' : 'md:text-right'}`}>
-                        {item.details.map((detail, idx) => <li key={idx} className="text-muted-foreground text-sm md:text-base leading-relaxed flex items-start gap-2">
-                            <span className="text-primary mt-1">•</span>
-                            <span className="flex-1">{detail}</span>
-                          </li>)}
-                      </ul>
+                      {/* Bottom Accent Line */}
+                      <div className="h-1 bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20" />
                     </div>
                   </div>
                 );
