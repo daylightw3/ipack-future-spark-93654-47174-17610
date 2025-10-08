@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Factory, Package, Award, Trophy, Zap, CheckCircle } from "lucide-react";
+import { Factory, Package, Award, Trophy, Zap, CheckCircle, ChevronDown, SkipForward } from "lucide-react";
 
 // Custom hook for animated counting
 const useCountAnimation = (end: number, duration: number = 2000, isVisible: boolean) => {
@@ -38,6 +38,10 @@ const About = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [sectionProgress, setSectionProgress] = useState(0);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [isScrollLocked, setIsScrollLocked] = useState(false);
+  const [scrollLockProgress, setScrollLockProgress] = useState(0);
+  const [hasCompletedTimeline, setHasCompletedTimeline] = useState(false);
+  const [showScrollHint, setShowScrollHint] = useState(true);
   const sectionRef = useRef<HTMLDivElement>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
 
@@ -69,42 +73,143 @@ const About = () => {
     return () => observer.disconnect();
   }, []);
 
-  // Scroll-based progression
+  // Timeline visibility and scroll lock detection
   useEffect(() => {
-    const handleScroll = () => {
-      if (!timelineRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasCompletedTimeline) {
+          setIsScrollLocked(true);
+          setTimeout(() => setShowScrollHint(false), 3000); // Hide hint after 3s
+        } else if (!entry.isIntersecting) {
+          setIsScrollLocked(false);
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    if (timelineRef.current) {
+      observer.observe(timelineRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasCompletedTimeline]);
+
+  // Scroll lock mechanism
+  useEffect(() => {
+    if (!isScrollLocked || hasCompletedTimeline) return;
+
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
       
-      const rect = timelineRef.current.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
-      const elementTop = rect.top;
-      const elementHeight = rect.height;
-      
-      // Calculate progress from 0 to 1 based on scroll position
-      const startScroll = elementTop - windowHeight * 0.8;
-      const endScroll = elementTop + elementHeight - windowHeight * 0.3;
-      const scrollRange = endScroll - startScroll;
-      const progress = Math.max(0, Math.min(1, -startScroll / scrollRange));
-      
-      setSectionProgress(progress);
+      setScrollLockProgress(prev => {
+        const delta = e.deltaY > 0 ? 0.018 : -0.018;
+        const newProgress = Math.max(0, Math.min(1, prev + delta));
+        
+        // Check if completed
+        if (newProgress >= 0.99 && prev < 0.99) {
+          setHasCompletedTimeline(true);
+          setIsScrollLocked(false);
+        }
+        
+        return newProgress;
+      });
     };
 
-    // Throttle scroll events for performance
-    let ticking = false;
-    const throttledScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          handleScroll();
-          ticking = false;
-        });
-        ticking = true;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+        e.preventDefault();
+        setScrollLockProgress(prev => Math.min(1, prev + 0.05));
+      } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+        e.preventDefault();
+        setScrollLockProgress(prev => Math.max(0, prev - 0.05));
       }
     };
 
-    window.addEventListener('scroll', throttledScroll, { passive: true });
-    handleScroll(); // Initial call
+    let touchStartY = 0;
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartY = e.touches[0].clientY;
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!timelineRef.current) return;
+      
+      const rect = timelineRef.current.getBoundingClientRect();
+      const isInTimeline = rect.top <= window.innerHeight * 0.5 && rect.bottom >= window.innerHeight * 0.5;
+      
+      if (isInTimeline) {
+        e.preventDefault();
+        
+        const touchY = e.touches[0].clientY;
+        const delta = (touchStartY - touchY) * 0.002;
+        
+        setScrollLockProgress(prev => {
+          const newProgress = Math.max(0, Math.min(1, prev + delta));
+          
+          if (newProgress >= 0.99 && prev < 0.99) {
+            setHasCompletedTimeline(true);
+            setIsScrollLocked(false);
+          }
+          
+          return newProgress;
+        });
+        
+        touchStartY = touchY;
+      }
+    };
+
+    window.addEventListener('wheel', handleWheel, { passive: false });
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
     
-    return () => window.removeEventListener('scroll', throttledScroll);
-  }, []);
+    return () => {
+      window.removeEventListener('wheel', handleWheel);
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
+    };
+  }, [isScrollLocked, hasCompletedTimeline]);
+
+  // Use scrollLockProgress when locked, otherwise use regular scroll
+  useEffect(() => {
+    if (isScrollLocked) {
+      setSectionProgress(scrollLockProgress);
+    } else if (!hasCompletedTimeline) {
+      // Regular scroll-based progression
+      const handleScroll = () => {
+        if (!timelineRef.current) return;
+        
+        const rect = timelineRef.current.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+        const elementTop = rect.top;
+        const elementHeight = rect.height;
+        
+        const startScroll = elementTop - windowHeight * 0.8;
+        const endScroll = elementTop + elementHeight - windowHeight * 0.3;
+        const scrollRange = endScroll - startScroll;
+        const progress = Math.max(0, Math.min(1, -startScroll / scrollRange));
+        
+        setSectionProgress(progress);
+      };
+
+      let ticking = false;
+      const throttledScroll = () => {
+        if (!ticking) {
+          window.requestAnimationFrame(() => {
+            handleScroll();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      };
+
+      window.addEventListener('scroll', throttledScroll, { passive: true });
+      handleScroll();
+      
+      return () => window.removeEventListener('scroll', throttledScroll);
+    }
+  }, [isScrollLocked, scrollLockProgress, hasCompletedTimeline]);
 
   const stats = [
     { icon: Package, value: 10, suffix: "B+", label: "Packs Sold by 2022", color: "text-primary" },
@@ -167,6 +272,18 @@ const About = () => {
 
   // Dynamic section height based on number of cards
   const timelineHeight = Math.min(40 + timeline.length * 40, 140);
+  
+  // Calculate active card index
+  const numCards = timeline.length;
+  const activeCardIndex = Math.floor(sectionProgress * numCards);
+  
+  // Skip timeline handler
+  const handleSkipTimeline = () => {
+    setHasCompletedTimeline(true);
+    setIsScrollLocked(false);
+    setScrollLockProgress(1);
+    setSectionProgress(1);
+  };
 
   return (
     <section id="about" ref={sectionRef} className="py-20 bg-background">
@@ -289,6 +406,58 @@ const About = () => {
                 }}
               />
             </div>
+
+            {/* Scroll Hint */}
+            {isScrollLocked && showScrollHint && (
+              <div className="fixed top-[25vh] left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2 animate-fade-in pointer-events-none">
+                <div className="bg-primary/90 backdrop-blur-sm text-primary-foreground px-6 py-3 rounded-full text-sm font-medium shadow-xl">
+                  Scroll to explore our journey
+                </div>
+                <ChevronDown className="w-6 h-6 text-primary animate-bounce" />
+              </div>
+            )}
+
+            {/* Progress Indicator */}
+            {isScrollLocked && !hasCompletedTimeline && (
+              <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 animate-fade-in">
+                <div className="bg-background/95 backdrop-blur-lg border-2 border-primary/20 rounded-full px-6 py-4 shadow-2xl flex items-center gap-4">
+                  <div className="text-sm font-semibold text-foreground">
+                    <span className="text-primary text-lg">{activeCardIndex + 1}</span>
+                    <span className="text-muted-foreground"> of {timeline.length}</span>
+                  </div>
+                  <div className="flex gap-2">
+                    {timeline.map((_, idx) => (
+                      <div
+                        key={idx}
+                        className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                          idx <= activeCardIndex
+                            ? 'bg-primary scale-125'
+                            : 'bg-primary/20'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <button
+                    onClick={handleSkipTimeline}
+                    className="ml-2 p-2 hover:bg-primary/10 rounded-full transition-colors group"
+                    title="Skip timeline"
+                  >
+                    <SkipForward className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Completion Message */}
+            {hasCompletedTimeline && sectionProgress >= 0.95 && (
+              <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 animate-scale-in">
+                <div className="bg-primary/90 backdrop-blur-lg text-primary-foreground px-8 py-4 rounded-full shadow-2xl flex items-center gap-3 border-2 border-primary">
+                  <CheckCircle className="w-5 h-5" />
+                  <span className="font-semibold">Timeline complete! Scroll to continue</span>
+                  <ChevronDown className="w-5 h-5 animate-bounce" />
+                </div>
+              </div>
+            )}
 
             {/* Sticky Stage for Cards */}
             <div className="sticky top-[15vh] h-[60vh] flex items-center justify-center">
