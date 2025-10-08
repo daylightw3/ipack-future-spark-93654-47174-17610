@@ -236,12 +236,9 @@ const About = () => {
                   }}
                 >
                   {isVisible && (
-                    <>
-                      <span className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
-                        {countValue}
-                      </span>
-                      <span className="text-primary">{stat.suffix}</span>
-                    </>
+                    <span className="text-foreground">
+                      {countValue}{stat.suffix}
+                    </span>
                   )}
                 </div>
                 
@@ -266,7 +263,7 @@ const About = () => {
           <h3 className="text-4xl md:text-5xl font-bold text-center mb-20 bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent animate-fade-in">
             Our Journey
           </h3>
-          <div className="relative max-w-7xl mx-auto timeline-container">
+          <div className="relative max-w-[1400px] mx-auto timeline-container">
             {/* Scroll-Based Progressive Vertical Line */}
             <div 
               className="absolute left-1/2 transform -translate-x-1/2 top-0 hidden md:block"
@@ -319,7 +316,7 @@ const About = () => {
                   >
                     {/* Content Card with 3D Stacked Animation */}
                     <div 
-                      className={`w-full md:w-5/12 ${isLeft ? "md:pr-16" : "md:pl-16"} mb-8 md:mb-0 timeline-card-wrapper`}
+                      className={`w-full md:w-[48%] ${isLeft ? "md:pr-12" : "md:pl-12"} mb-8 md:mb-0 timeline-card-wrapper`}
                       style={{
                         opacity: isCardVisible ? 1 : 0,
                         transform: isCardVisible 
@@ -331,13 +328,11 @@ const About = () => {
                         zIndex: isCardVisible ? 10 - index : 0,
                       }}
                     >
-                      <div className="group relative backdrop-blur-sm bg-gradient-to-br from-background via-background to-primary/5 p-8 md:p-10 rounded-2xl border-2 border-primary/20 hover:border-primary/50 shadow-xl hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 hover:scale-[1.02] hover:-translate-y-2" style={{ transformStyle: 'preserve-3d' }}>
-                        {/* Glow Effect */}
-                        <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
+                      <div className="group relative bg-background p-8 md:p-10 rounded-2xl border-2 border-primary/20 hover:border-primary/30 shadow-lg hover:shadow-xl transition-all duration-500 hover:-translate-y-1" style={{ transformStyle: 'preserve-3d' }}>
                         
                         {/* Year Badge with Bounce Animation */}
                         <div 
-                          className={`inline-block px-6 py-3 bg-gradient-to-r from-primary to-accent text-white font-bold text-xl md:text-2xl rounded-full mb-6 shadow-lg ${isLeft ? '' : 'md:float-right'}`}
+                          className={`inline-block px-6 py-3 bg-gradient-to-r from-primary to-accent text-white font-bold text-xl md:text-2xl rounded-full mb-6 shadow-md ${isLeft ? '' : 'md:float-right'}`}
                           style={{
                             transform: isCardVisible ? 'translateY(0) scale(1)' : 'translateY(-20px) scale(0.8)',
                             opacity: isCardVisible ? 1 : 0,
