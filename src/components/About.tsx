@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Factory, Package, Award, Trophy, Zap, CheckCircle, ChevronDown, SkipForward } from "lucide-react";
+import { Factory, Package, Award, Trophy, Zap, CheckCircle } from "lucide-react";
 
 // Custom hook for animated counting
 const useCountAnimation = (end: number, duration: number = 2000, isVisible: boolean) => {
@@ -41,7 +41,6 @@ const About = () => {
   const [isScrollLocked, setIsScrollLocked] = useState(false);
   const [scrollLockProgress, setScrollLockProgress] = useState(0);
   const [hasCompletedTimeline, setHasCompletedTimeline] = useState(false);
-  const [showScrollHint, setShowScrollHint] = useState(true);
   const sectionRef = useRef<HTMLDivElement>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
 
@@ -79,7 +78,6 @@ const About = () => {
       ([entry]) => {
         if (entry.isIntersecting && !hasCompletedTimeline) {
           setIsScrollLocked(true);
-          setTimeout(() => setShowScrollHint(false), 3000); // Hide hint after 3s
         } else if (!entry.isIntersecting) {
           setIsScrollLocked(false);
         }
@@ -276,14 +274,6 @@ const About = () => {
   // Calculate active card index
   const numCards = timeline.length;
   const activeCardIndex = Math.floor(sectionProgress * numCards);
-  
-  // Skip timeline handler
-  const handleSkipTimeline = () => {
-    setHasCompletedTimeline(true);
-    setIsScrollLocked(false);
-    setScrollLockProgress(1);
-    setSectionProgress(1);
-  };
 
   return (
     <section id="about" ref={sectionRef} className="py-20 bg-background">
@@ -407,58 +397,6 @@ const About = () => {
               />
             </div>
 
-            {/* Scroll Hint */}
-            {isScrollLocked && showScrollHint && (
-              <div className="fixed top-[25vh] left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2 animate-fade-in pointer-events-none">
-                <div className="bg-primary/90 backdrop-blur-sm text-primary-foreground px-6 py-3 rounded-full text-sm font-medium shadow-xl">
-                  Scroll to explore our journey
-                </div>
-                <ChevronDown className="w-6 h-6 text-primary animate-bounce" />
-              </div>
-            )}
-
-            {/* Progress Indicator */}
-            {isScrollLocked && !hasCompletedTimeline && (
-              <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 animate-fade-in">
-                <div className="bg-background/95 backdrop-blur-lg border-2 border-primary/20 rounded-full px-6 py-4 shadow-2xl flex items-center gap-4">
-                  <div className="text-sm font-semibold text-foreground">
-                    <span className="text-primary text-lg">{activeCardIndex + 1}</span>
-                    <span className="text-muted-foreground"> of {timeline.length}</span>
-                  </div>
-                  <div className="flex gap-2">
-                    {timeline.map((_, idx) => (
-                      <div
-                        key={idx}
-                        className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                          idx <= activeCardIndex
-                            ? 'bg-primary scale-125'
-                            : 'bg-primary/20'
-                        }`}
-                      />
-                    ))}
-                  </div>
-                  <button
-                    onClick={handleSkipTimeline}
-                    className="ml-2 p-2 hover:bg-primary/10 rounded-full transition-colors group"
-                    title="Skip timeline"
-                  >
-                    <SkipForward className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* Completion Message */}
-            {hasCompletedTimeline && sectionProgress >= 0.95 && (
-              <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 animate-scale-in">
-                <div className="bg-primary/90 backdrop-blur-lg text-primary-foreground px-8 py-4 rounded-full shadow-2xl flex items-center gap-3 border-2 border-primary">
-                  <CheckCircle className="w-5 h-5" />
-                  <span className="font-semibold">Timeline complete! Scroll to continue</span>
-                  <ChevronDown className="w-5 h-5 animate-bounce" />
-                </div>
-              </div>
-            )}
-
             {/* Sticky Stage for Cards */}
             <div className="sticky top-[15vh] h-[60vh] flex items-center justify-center">
               {timeline.map((item, index) => {
@@ -563,16 +501,6 @@ const About = () => {
                         ))}
                       </ul>
                     </div>
-
-                    {/* Center Dot */}
-                    {index === activeIndex && (
-                      <div 
-                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 hidden md:block w-5 h-5 rounded-full border-2 border-primary bg-background shadow-lg"
-                        style={{
-                          boxShadow: '0 0 20px hsl(var(--primary) / 0.4), 0 0 40px hsl(var(--accent) / 0.3)',
-                        }}
-                      />
-                    )}
                   </div>
                 );
               })}
