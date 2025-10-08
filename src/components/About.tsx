@@ -316,7 +316,7 @@ const About = () => {
                   >
                     {/* Content Card with 3D Stacked Animation */}
                     <div 
-                      className={`w-full md:w-[40%] mb-8 md:mb-0 timeline-card-wrapper`}
+                      className={`w-full md:w-1/2 mb-8 md:mb-0 timeline-card-wrapper ${isLeft ? 'md:pr-12' : 'md:pl-12'}`}
                       style={{
                         opacity: isCardVisible ? 1 : 0,
                         transform: isCardVisible 
