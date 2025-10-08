@@ -350,8 +350,9 @@ const About = () => {
 
               // Calculate active index and transition progress
               const numCards = timeline.length;
-              const activeIndex = Math.floor(sectionProgress * numCards);
-              const localProgress = sectionProgress * numCards % 1;
+              const rawProgress = sectionProgress * numCards;
+              const activeIndex = Math.floor(rawProgress);
+              const localProgress = rawProgress % 1;
 
               // Depth from active card (for stacking effect)
               const depth = activeIndex - index;
@@ -368,18 +369,30 @@ const About = () => {
 
               // Enhanced styling classes
               let cardClasses = "group relative p-6 md:px-8 md:py-10 rounded-2xl border-2 transition-all duration-500";
-              if (index < activeIndex) {
-                // Past cards - depth-based stacking
-                opacity = 1 - Math.min(depth * 0.18, 0.55);
+              
+              if (index < activeIndex - 1) {
+                // Cards far in the past - hidden
+                opacity = 0;
+                visibility = 'hidden';
+                pointerEvents = 'none';
                 translateX = 0;
-                translateY = Math.min(depth * 10, 36);
-                scale = Math.max(1 - depth * 0.02, 0.92);
+                translateY = 50;
+                scale = 0.9;
+                cardClasses += " bg-gradient-to-br from-background to-primary/5 border-primary/10 shadow-lg";
+              } else if (index === activeIndex - 1) {
+                // Previous card - visible with reduced opacity for smooth backward transition
+                opacity = 0.3;
+                translateX = 0;
+                translateY = 10;
+                scale = 0.98;
                 pointerEvents = 'none';
                 ariaHidden = true;
                 visibility = 'visible';
                 cardClasses += " bg-gradient-to-br from-background to-primary/5 border-primary/10 shadow-lg";
               } else if (index === activeIndex) {
-                // Current active card - highlighted
+                // Current active card - animating out when scrolling forward, in when scrolling backward
+                // When localProgress increases (scrolling forward), card stays at center
+                // When localProgress decreases (scrolling backward), card becomes fully visible
                 opacity = 1;
                 translateX = 0;
                 translateY = 0;
@@ -387,9 +400,11 @@ const About = () => {
                 pointerEvents = 'auto';
                 ariaHidden = false;
                 visibility = 'visible';
+                zIndex = 100 + activeIndex + 10; // Higher z-index for active card
                 cardClasses += " bg-gradient-to-br from-background to-primary/5 border-primary/15 shadow-2xl ring-1 ring-primary/20";
               } else if (index === activeIndex + 1) {
-                // Next card - animating in
+                // Next card - smoothly animating in from the side
+                // localProgress 0 -> 1: card moves from side to center
                 opacity = localProgress;
                 translateX = (isLeft ? -120 : 120) * (1 - localProgress);
                 translateY = 0;
@@ -397,23 +412,28 @@ const About = () => {
                 pointerEvents = 'none';
                 ariaHidden = true;
                 visibility = 'visible';
+                zIndex = 100 + activeIndex + 5; // Medium z-index
                 cardClasses += " bg-gradient-to-br from-background to-primary/5 border-primary/15 shadow-xl";
               } else {
                 // Future cards - completely hidden
                 opacity = 0;
                 visibility = 'hidden';
                 pointerEvents = 'none';
+                translateX = isLeft ? -120 : 120;
+                translateY = 0;
+                scale = 0.96;
                 cardClasses += " bg-gradient-to-br from-background to-primary/5 border-primary/10 shadow-lg";
               }
-              const transitionDuration = prefersReducedMotion ? '0s' : '0.6s';
+              const transitionDuration = prefersReducedMotion ? '0s' : '0.5s';
               return <div key={index} className="absolute w-full md:w-1/2 px-4" style={{
                 opacity,
                 transform: `translateX(${translateX}px) translateY(${translateY}px) scale(${scale})`,
-                transition: `all ${transitionDuration} cubic-bezier(0.4, 0, 0.2, 1)`,
+                transition: `opacity ${transitionDuration} cubic-bezier(0.4, 0, 0.2, 1), transform ${transitionDuration} cubic-bezier(0.4, 0, 0.2, 1)`,
                 zIndex,
                 [isLeft ? 'left' : 'right']: 0,
                 pointerEvents,
-                visibility
+                visibility,
+                willChange: 'transform, opacity'
               }} aria-hidden={ariaHidden}>
                     <div className={cardClasses}>
                       {/* Year */}
