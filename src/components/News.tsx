@@ -8,7 +8,7 @@ const News = () => {
   ];
 
   return (
-    <section id="news" className="py-20 bg-white">
+    <section id="news" className="py-20 bg-gradient-to-b from-white via-secondary/30 to-white">
       <div className="container mx-auto px-4 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16 animate-fade-in">
@@ -20,22 +20,27 @@ const News = () => {
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-foreground">
             As Featured In
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
             Recognized by leading media outlets and industry organizations across the region
           </p>
         </div>
 
         {/* Partners Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 items-center">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 md:gap-8">
           {partners.map((partner, index) => (
             <div
               key={partner.name}
-              className="flex items-center justify-center p-6 bg-white rounded-xl hover-lift border border-gray-100 transition-all animate-fade-in"
+              className="group relative backdrop-blur-sm bg-white/90 rounded-2xl p-8 hover:-translate-y-2 border-2 border-primary/10 hover:border-primary/30 shadow-lg hover:shadow-xl hover:shadow-primary/10 transition-all duration-300 animate-fade-in"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <span className="text-base font-semibold text-muted-foreground text-center">
-                {partner.name}
-              </span>
+              {/* Gradient Glow on Hover */}
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
+              
+              <div className="flex items-center justify-center">
+                <span className="text-base md:text-lg font-bold text-muted-foreground group-hover:text-primary transition-colors text-center leading-relaxed">
+                  {partner.name}
+                </span>
+              </div>
             </div>
           ))}
         </div>

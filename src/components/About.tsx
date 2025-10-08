@@ -254,25 +254,13 @@ const About = () => {
                         zIndex: isCardVisible ? 10 - index : 0,
                       }}
                     >
-                      <div className="group relative backdrop-blur-sm bg-gradient-to-br from-background via-background to-primary/5 p-8 rounded-2xl border-2 border-primary/20 hover:border-primary/50 shadow-xl hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 hover:scale-[1.05] hover:-translate-y-2" style={{ transformStyle: 'preserve-3d' }}>
+                      <div className="group relative backdrop-blur-sm bg-gradient-to-br from-background via-background to-primary/5 p-8 md:p-10 rounded-2xl border-2 border-primary/20 hover:border-primary/50 shadow-xl hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 hover:scale-[1.02] hover:-translate-y-2" style={{ transformStyle: 'preserve-3d' }}>
                         {/* Glow Effect */}
                         <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
                         
-                        {/* Icon Badge with Rotation Animation */}
-                        <div 
-                          className={`inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-primary to-accent mb-6 shadow-lg ${isLeft ? '' : 'md:float-right'}`}
-                          style={{
-                            transform: isCardVisible ? 'rotate(0deg) scale(1)' : 'rotate(-180deg) scale(0.5)',
-                            opacity: isCardVisible ? 1 : 0,
-                            transition: `all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) ${index * 0.2 + 0.2}s`,
-                          }}
-                        >
-                          <Icon className="w-8 h-8 text-white" />
-                        </div>
-
                         {/* Year Badge with Bounce Animation */}
                         <div 
-                          className={`inline-block px-6 py-2 bg-gradient-to-r from-primary to-accent text-white font-bold text-xl rounded-full mb-4 shadow-lg ${isLeft ? '' : 'md:float-right md:clear-both'}`}
+                          className={`inline-block px-6 py-3 bg-gradient-to-r from-primary to-accent text-white font-bold text-xl md:text-2xl rounded-full mb-6 shadow-lg ${isLeft ? '' : 'md:float-right'}`}
                           style={{
                             transform: isCardVisible ? 'translateY(0) scale(1)' : 'translateY(-20px) scale(0.8)',
                             opacity: isCardVisible ? 1 : 0,
@@ -284,7 +272,7 @@ const About = () => {
                         </div>
 
                         {/* Event Title */}
-                        <h4 className={`text-2xl md:text-3xl font-bold mb-4 text-foreground ${isLeft ? 'text-left' : 'md:text-right'}`}>
+                        <h4 className={`text-xl md:text-2xl font-bold mb-6 text-foreground ${isLeft ? 'text-left' : 'md:text-right'} clear-both`}>
                           {item.event}
                         </h4>
 
