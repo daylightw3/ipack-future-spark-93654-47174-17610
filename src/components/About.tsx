@@ -330,25 +330,19 @@ const About = () => {
                     data-index={index}
                     className={`timeline-card relative flex items-center justify-center ${
                       isLeft ? "md:flex-row" : "md:flex-row-reverse"
-                    } flex-col min-h-[120vh] md:min-h-[140vh]`}
+                    } flex-col min-h-[60vh] md:min-h-[70vh]`}
                   >
                     {/* Content Card with Sticky Stacked Animation */}
                     <div 
                       className={`w-full md:w-1/2 mb-8 md:mb-0 timeline-card-wrapper ${isLeft ? 'md:pr-12' : 'md:pl-12'} md:sticky md:top-[20vh]`}
                       style={{
-                        opacity: isCardVisible ? (
-                          index === activeIndex ? 1 : 
-                          index < activeIndex ? 0.9 : 
-                          0
-                        ) : 0,
-                        transform: isCardVisible ? (
-                          index === activeIndex 
-                            ? "translateX(0) translateY(0) scale(1)" 
-                            : index < activeIndex
-                              ? "translateX(0) translateY(12px) scale(0.96)"
-                              : `translateX(${isLeft ? '-100px' : '100px'}) translateY(40px) scale(0.98)`
-                        ) : `translateX(${isLeft ? '-100px' : '100px'}) translateY(50px) scale(0.9)`,
-                        transition: `all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)`,
+                        opacity: index === activeIndex ? 1 : index < activeIndex ? 0 : 0,
+                        transform: index === activeIndex 
+                          ? "translateX(0) translateY(0) scale(1)" 
+                          : index < activeIndex
+                            ? "translateX(0) translateY(-20px) scale(0.95)"
+                            : `translateX(${isLeft ? '-80px' : '80px'}) translateY(20px) scale(0.95)`,
+                        transition: `all 0.5s cubic-bezier(0.4, 0, 0.2, 1)`,
                         willChange: 'transform, opacity',
                         zIndex: 100 + index,
                       }}
