@@ -1,6 +1,39 @@
 import { useEffect, useRef, useState } from "react";
 import { Factory, Package, Award, Trophy, Zap, CheckCircle } from "lucide-react";
 
+// Custom hook for animated counting
+const useCountAnimation = (end: number, duration: number = 2000, isVisible: boolean) => {
+  const [count, setCount] = useState(0);
+  
+  useEffect(() => {
+    if (!isVisible) return;
+    
+    let startTime: number;
+    let animationFrame: number;
+    
+    const animate = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = timestamp - startTime;
+      const percentage = Math.min(progress / duration, 1);
+      
+      // Easing function for smooth deceleration
+      const easeOutQuart = 1 - Math.pow(1 - percentage, 4);
+      setCount(Math.floor(end * easeOutQuart));
+      
+      if (percentage < 1) {
+        animationFrame = requestAnimationFrame(animate);
+      } else {
+        setCount(end);
+      }
+    };
+    
+    animationFrame = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animationFrame);
+  }, [end, duration, isVisible]);
+  
+  return count;
+};
+
 const About = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [visibleCards, setVisibleCards] = useState<number[]>([]);
@@ -88,9 +121,9 @@ const About = () => {
   }, [isVisible]);
 
   const stats = [
-    { icon: Package, value: "10B+", label: "Packs Sold by 2022", color: "text-primary" },
-    { icon: Trophy, value: "80%", label: "Products Exported", color: "text-accent" },
-    { icon: Factory, value: "160+", label: "Expert Team Members", color: "text-primary" },
+    { icon: Package, value: 10, suffix: "B+", label: "Packs Sold by 2022", color: "text-primary" },
+    { icon: Trophy, value: 80, suffix: "%", label: "Products Exported", color: "text-accent" },
+    { icon: Factory, value: 160, suffix: "+", label: "Expert Team Members", color: "text-primary" },
   ];
 
   const timeline = [
@@ -169,19 +202,63 @@ const About = () => {
 
         {/* Stats */}
         <div className="grid md:grid-cols-3 gap-8 mb-20">
-          {stats.map((stat, index) => (
-            <div
-              key={stat.label}
-              className="text-center p-8 rounded-2xl bg-secondary hover-lift animate-scale-in"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              <stat.icon className={`w-12 h-12 ${stat.color} mx-auto mb-4`} />
-              <div className="text-4xl font-bold text-foreground mb-2">
-                {isVisible && stat.value}
+          {stats.map((stat, index) => {
+            const countValue = useCountAnimation(stat.value, 2000, isVisible);
+            
+            return (
+              <div
+                key={stat.label}
+                className="group relative backdrop-blur-sm bg-gradient-to-br from-background via-background to-primary/5 p-10 md:p-12 rounded-3xl border-2 border-primary/20 hover:border-primary/40 shadow-xl hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 hover:-translate-y-2 animate-scale-in"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                {/* Glow Effect */}
+                <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
+                
+                {/* Icon Container with Gradient */}
+                <div 
+                  className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500"
+                  style={{
+                    opacity: isVisible ? 1 : 0,
+                    transform: isVisible ? 'scale(1)' : 'scale(0.8)',
+                    transition: `all 0.6s ease-out ${index * 0.1}s`,
+                  }}
+                >
+                  <stat.icon className={`w-10 h-10 ${stat.color}`} />
+                </div>
+                
+                {/* Animated Number */}
+                <div 
+                  className="text-5xl md:text-6xl font-bold mb-4 tabular-nums"
+                  style={{
+                    opacity: isVisible ? 1 : 0,
+                    transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
+                    transition: `all 0.6s ease-out ${index * 0.1 + 0.2}s`,
+                  }}
+                >
+                  {isVisible && (
+                    <>
+                      <span className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
+                        {countValue}
+                      </span>
+                      <span className="text-primary">{stat.suffix}</span>
+                    </>
+                  )}
+                </div>
+                
+                {/* Label with better typography */}
+                <div 
+                  className="text-base md:text-lg text-muted-foreground font-medium leading-relaxed"
+                  style={{
+                    opacity: isVisible ? 1 : 0,
+                    transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
+                    transition: `all 0.6s ease-out ${index * 0.1 + 0.4}s`,
+                  }}
+                >
+                  {stat.label}
+                </div>
               </div>
-              <div className="text-muted-foreground font-medium">{stat.label}</div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Timeline Section */}
@@ -277,27 +354,18 @@ const About = () => {
                         </h4>
 
                         {/* Details List with Sequential Fade In */}
-                        <ul className={`space-y-2 ${isLeft ? 'text-left' : 'md:text-right'}`}>
+                        <ul className={`space-y-3 ${isLeft ? 'text-left' : 'md:text-right'}`}>
                           {item.details.map((detail, idx) => (
                             <li 
                               key={idx} 
-                              className={`flex items-center gap-2 text-muted-foreground ${isLeft ? '' : 'md:justify-end'}`}
+                              className="text-muted-foreground text-sm md:text-base leading-relaxed"
                               style={{
                                 opacity: isCardVisible ? 1 : 0,
                                 transform: isCardVisible ? 'translateY(0)' : 'translateY(10px)',
                                 transition: `all 0.5s ease-out ${index * 0.2 + 0.4 + idx * 0.1}s`,
                               }}
                             >
-                              {!isLeft && <span className="hidden md:inline text-sm md:text-base">{detail}</span>}
-                              <div 
-                                className="w-2 h-2 rounded-full bg-primary flex-shrink-0"
-                                style={{
-                                  animation: isCardVisible ? 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite' : 'none',
-                                  animationDelay: `${idx * 0.2}s`,
-                                }}
-                              />
-                              {isLeft && <span className="text-sm md:text-base">{detail}</span>}
-                              {!isLeft && <span className="md:hidden text-sm">{detail}</span>}
+                              {detail}
                             </li>
                           ))}
                         </ul>

@@ -16,11 +16,6 @@ const Products = () => {
       image: productMaterials,
       description: "Multi-layer technology ensuring product safety and freshness",
     },
-    {
-      title: "For Juices & Beverages",
-      image: productJuice,
-      description: "Premium packaging solutions for all beverage types",
-    },
   ];
 
   const formats = [
@@ -72,7 +67,7 @@ const Products = () => {
         </div>
 
         {/* Product Grid */}
-        <div className="grid md:grid-cols-3 gap-8 mb-20">
+        <div className="grid md:grid-cols-2 gap-8 mb-20 max-w-5xl mx-auto">
           {products.map((product, index) => (
             <div
               key={product.title}
