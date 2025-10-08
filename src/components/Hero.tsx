@@ -22,9 +22,11 @@ const Hero = () => {
               {/* Avatar iFrame */}
               <iframe 
                 src="https://labs.heygen.com/guest/streaming-embed?share=eyJxdWFsaXR5IjoiaGlnaCIsImF2YXRhck5hbWUiOiIxZWM1NmNhZDI0Zjg0YzhkOGEzYmFjNDlh%0D%0AYmIxMTk3MSIsInByZXZpZXdJbWciOiJodHRwczovL2ZpbGVzMi5oZXlnZW4uYWkvYXZhdGFyL3Yz%0D%0ALzFlYzU2Y2FkMjRmODRjOGQ4YTNiYWM0OWFiYjExOTcxL2Z1bGwvMi4yL3ByZXZpZXdfdGFyZ2V0%0D%0ALndlYnAiLCJuZWVkUmVtb3ZlQmFja2dyb3VuZCI6ZmFsc2UsImtub3dsZWRnZUJhc2VJZCI6ImZj%0D%0AMTI4YTkzZDhjYTRmOGJiMTRhNDE4YWJkNDYzM2I1IiwidXNlcm5hbWUiOiI5ODMyYTRjM2EzMzI0%0D%0AMzI4YjhiNGJjMWYyY2I0ZjllOCJ9&inIFrame=1" 
-                allow="microphone camera" 
+                allow="microphone; camera; autoplay; encrypted-media; fullscreen; display-capture" 
+                allowFullScreen
                 className="w-full h-full border-0 rounded-2xl" 
-                title="HeyGen Interactive AI Assistant" 
+                title="HeyGen Interactive AI Assistant - Voice Chat Enabled"
+                style={{ width: '100%', height: '100%' }}
               />
             </div>
           </div>
