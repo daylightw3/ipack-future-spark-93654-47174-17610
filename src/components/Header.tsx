@@ -11,19 +11,28 @@ const Header = () => {
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
+      const viewportHeight = window.innerHeight;
       
       setIsScrolled(currentScrollY > 20);
       
-      // Show header on any scroll, hide when scrolling down past threshold
-      if (currentScrollY > 10) {
-        setIsVisible(true);
-      }
-      
-      if (currentScrollY > lastScrollY && currentScrollY > 80) {
+      // Hide header in hero section, show in other sections
+      if (currentScrollY < viewportHeight - 100) {
+        // Still in hero section
         setIsVisible(false);
         setIsMobileMenuOpen(false);
-      } else if (currentScrollY < lastScrollY) {
-        setIsVisible(true);
+      } else {
+        // In other sections - show/hide based on scroll direction
+        if (currentScrollY > lastScrollY && currentScrollY > viewportHeight + 80) {
+          // Scrolling down
+          setIsVisible(false);
+          setIsMobileMenuOpen(false);
+        } else if (currentScrollY < lastScrollY) {
+          // Scrolling up
+          setIsVisible(true);
+        } else {
+          // Just entered other sections
+          setIsVisible(true);
+        }
       }
       
       setLastScrollY(currentScrollY);
