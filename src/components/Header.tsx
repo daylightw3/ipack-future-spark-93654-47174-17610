@@ -4,7 +4,7 @@ import { Menu, X } from "lucide-react";
 import logo from "@/assets/ipack-logo-transparent.png";
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
@@ -14,12 +14,16 @@ const Header = () => {
       
       setIsScrolled(currentScrollY > 20);
       
-      // Show header when scrolling up or at top, hide when scrolling down
-      if (currentScrollY < lastScrollY || currentScrollY < 10) {
+      // Show header on any scroll, hide when scrolling down past threshold
+      if (currentScrollY > 10) {
         setIsVisible(true);
-      } else if (currentScrollY > lastScrollY && currentScrollY > 80) {
+      }
+      
+      if (currentScrollY > lastScrollY && currentScrollY > 80) {
         setIsVisible(false);
         setIsMobileMenuOpen(false);
+      } else if (currentScrollY < lastScrollY) {
+        setIsVisible(true);
       }
       
       setLastScrollY(currentScrollY);

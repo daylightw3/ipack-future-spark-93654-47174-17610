@@ -11,7 +11,7 @@ const Hero = () => {
   };
   return <>
       {/* Professional Large Interactive Avatar Frame */}
-      <section id="home" className="relative h-[calc(100vh-4rem)] lg:h-[calc(100vh-5rem)] mt-16 lg:mt-20 overflow-hidden">
+      <section id="home" className="relative h-screen overflow-hidden">
         <div className="w-full h-full">
           <div className="w-full h-full">
             <div className="relative w-full h-full overflow-hidden">
