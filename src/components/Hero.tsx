@@ -11,16 +11,14 @@ const Hero = () => {
   };
   return <>
       {/* Professional Large Interactive Avatar Frame */}
-      <section id="home" className="relative min-h-[calc(100vh-5rem)] lg:min-h-[calc(100vh-6rem)] pt-20 lg:pt-24 py-6 md:py-8 overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background">
-        <div className="container mx-auto px-4 lg:px-8 h-full">
-          <div className="max-w-7xl mx-auto h-full flex items-center justify-center animate-fade-in">
-            {/* Professional Frame Container */}
-            <div className="relative w-full h-[80vh] rounded-3xl overflow-hidden backdrop-blur-sm bg-background/50 border-2 border-primary/30 shadow-2xl hover:shadow-primary/30 transition-all duration-500">
-              {/* Gradient Border Glow */}
-              <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 blur-xl -z-10 animate-pulse" />
+      <section id="home" className="relative h-[calc(100vh-5rem)] lg:h-[calc(100vh-6rem)] pt-20 lg:pt-24 overflow-hidden bg-background">
+        <div className="container mx-auto px-0 h-full">
+          <div className="w-full h-full flex items-center justify-center">
+            {/* Fullscreen Frame Container */}
+            <div className="relative w-full h-full overflow-hidden bg-background/50">
               
               {/* Avatar iFrame */}
-              <iframe src="https://labs.heygen.com/guest/streaming-embed?share=eyJxdWFsaXR5IjoiaGlnaCIsImF2YXRhck5hbWUiOiIxZWM1NmNhZDI0Zjg0YzhkOGEzYmFjNDlh%0D%0AYmIxMTk3MSIsInByZXZpZXdJbWciOiJodHRwczovL2ZpbGVzMi5oZXlnZW4uYWkvYXZhdGFyL3Yz%0D%0ALzFlYzU2Y2FkMjRmODRjOGQ4YTNiYWM0OWFiYjExOTcxL2Z1bGwvMi4yL3ByZXZpZXdfdGFyZ2V0%0D%0ALndlYnAiLCJuZWVkUmVtb3ZlQmFja2dyb3VuZCI6ZmFsc2UsImtub3dsZWRnZUJhc2VJZCI6ImZj%0D%0AMTI4YTkzZDhjYTRmOGJiMTRhNDE4YWJkNDYzM2I1IiwidXNlcm5hbWUiOiI5ODMyYTRjM2EzMzI0%0D%0AMzI4YjhiNGJjMWYyY2I0ZjllOCJ9&inIFrame=1" allow="microphone; camera; autoplay; encrypted-media; fullscreen; display-capture" allowFullScreen className="w-full h-full border-0 rounded-2xl" title="HeyGen Interactive AI Assistant - Voice Chat Enabled" style={{
+              <iframe src="https://labs.heygen.com/guest/streaming-embed?share=eyJxdWFsaXR5IjoiaGlnaCIsImF2YXRhck5hbWUiOiIxZWM1NmNhZDI0Zjg0YzhkOGEzYmFjNDlh%0D%0AYmIxMTk3MSIsInByZXZpZXdJbWciOiJodHRwczovL2ZpbGVzMi5oZXlnZW4uYWkvYXZhdGFyL3Yz%0D%0ALzFlYzU2Y2FkMjRmODRjOGQ4YTNiYWM0OWFiYjExOTcxL2Z1bGwvMi4yL3ByZXZpZXdfdGFyZ2V0%0D%0ALndlYnAiLCJuZWVkUmVtb3ZlQmFja2dyb3VuZCI6ZmFsc2UsImtub3dsZWRnZUJhc2VJZCI6ImZj%0D%0AMTI4YTkzZDhjYTRmOGJiMTRhNDE4YWJkNDYzM2I1IiwidXNlcm5hbWUiOiI5ODMyYTRjM2EzMzI0%0D%0AMzI4YjhiNGJjMWYyY2I0ZjllOCJ9&inIFrame=1" allow="microphone; camera; autoplay; encrypted-media; fullscreen; display-capture" allowFullScreen className="w-full h-full border-0" title="HeyGen Interactive AI Assistant - Voice Chat Enabled" style={{
               width: '100%',
               height: '100%'
             }} />
