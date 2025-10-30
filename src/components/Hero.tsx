@@ -11,11 +11,10 @@ const Hero = () => {
   };
   return <>
       {/* Professional Large Interactive Avatar Frame */}
-      <section id="home" className="relative h-[calc(100vh-5rem)] lg:h-[calc(100vh-6rem)] pt-20 lg:pt-24 overflow-hidden bg-background">
-        <div className="container mx-auto px-0 h-full">
-          <div className="w-full h-full flex items-center justify-center">
-            {/* Fullscreen Frame Container */}
-            <div className="relative w-full h-full overflow-hidden bg-background/50">
+      <section id="home" className="relative h-[calc(100vh-4rem)] lg:h-[calc(100vh-5rem)] mt-16 lg:mt-20 overflow-hidden">
+        <div className="w-full h-full">
+          <div className="w-full h-full">
+            <div className="relative w-full h-full overflow-hidden">
               
               {/* Avatar iFrame */}
               <iframe src="https://labs.heygen.com/guest/streaming-embed?share=eyJxdWFsaXR5IjoiaGlnaCIsImF2YXRhck5hbWUiOiIxZWM1NmNhZDI0Zjg0YzhkOGEzYmFjNDlh%0D%0AYmIxMTk3MSIsInByZXZpZXdJbWciOiJodHRwczovL2ZpbGVzMi5oZXlnZW4uYWkvYXZhdGFyL3Yz%0D%0ALzFlYzU2Y2FkMjRmODRjOGQ4YTNiYWM0OWFiYjExOTcxL2Z1bGwvMi4yL3ByZXZpZXdfdGFyZ2V0%0D%0ALndlYnAiLCJuZWVkUmVtb3ZlQmFja2dyb3VuZCI6ZmFsc2UsImtub3dsZWRnZUJhc2VJZCI6ImZj%0D%0AMTI4YTkzZDhjYTRmOGJiMTRhNDE4YWJkNDYzM2I1IiwidXNlcm5hbWUiOiI5ODMyYTRjM2EzMzI0%0D%0AMzI4YjhiNGJjMWYyY2I0ZjllOCJ9&inIFrame=1" allow="microphone; camera; autoplay; encrypted-media; fullscreen; display-capture" allowFullScreen className="w-full h-full border-0" title="HeyGen Interactive AI Assistant - Voice Chat Enabled" style={{
