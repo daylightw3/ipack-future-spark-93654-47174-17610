@@ -1,46 +1,36 @@
+import SectionHeading from "@/components/SectionHeading";
+
+const media = [
+  { name: "Gulf News", tag: "National Press" },
+  { name: "Packaging MEA", tag: "Industry Media" },
+  { name: "UAE Ministry of Industry", tag: "Government" },
+  { name: "Abu Dhabi Investment Office", tag: "Government" },
+  { name: "Emirates Chamber", tag: "Trade Body" },
+];
+
 const News = () => {
-  const partners = [
-    { name: "Gulf News" },
-    { name: "Packaging MEA" },
-    { name: "UAE Ministry of Industry" },
-    { name: "Abu Dhabi Investment Office" },
-    { name: "Emirates Chamber" },
-  ];
-
   return (
-    <section id="news" className="py-14 bg-gradient-to-b from-white via-secondary/30 to-white">
+    <section id="news" className="py-14 md:py-16 bg-secondary">
       <div className="container mx-auto px-4 lg:px-8">
-        {/* Header */}
-        <div className="text-center mb-12 animate-fade-in">
-          <div className="inline-flex items-center gap-2 bg-accent/10 rounded-full px-6 py-2 mb-4">
-            <span className="text-accent font-semibold text-sm tracking-wide uppercase">
-              Media & Recognition
-            </span>
-          </div>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-foreground">
-            As Featured In
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            Recognized by leading media outlets and industry organizations across the region
-          </p>
-        </div>
+        <SectionHeading
+          eyebrow="Media & Recognition"
+          title="As Featured In"
+          subtitle="Recognized by leading media outlets and industry organizations across the region"
+        />
 
-        {/* Partners Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 md:gap-8">
-          {partners.map((partner, index) => (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-px bg-border rounded-2xl overflow-hidden shadow-sm animate-fade-in">
+          {media.map((partner) => (
             <div
               key={partner.name}
-              className="group relative backdrop-blur-sm bg-white/90 rounded-2xl p-6 hover:-translate-y-2 border-2 border-primary/10 hover:border-primary/30 shadow-lg hover:shadow-xl hover:shadow-primary/10 transition-all duration-300 animate-fade-in"
-              style={{ animationDelay: `${index * 0.1}s` }}
+              className="group relative bg-card px-5 py-10 flex flex-col items-center justify-center text-center transition-colors duration-300 hover:bg-background"
             >
-              {/* Gradient Glow on Hover */}
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
-              
-              <div className="flex items-center justify-center">
-                <span className="text-base md:text-lg font-bold text-muted-foreground group-hover:text-primary transition-colors text-center leading-relaxed">
-                  {partner.name}
-                </span>
-              </div>
+              <span className="absolute top-0 left-0 right-0 h-0.5 bg-accent origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out" />
+              <span className="text-sm md:text-base font-bold text-muted-foreground group-hover:text-foreground leading-snug transition-colors duration-300">
+                {partner.name}
+              </span>
+              <span className="mt-2 text-[11px] text-muted-foreground/70 tracking-wide uppercase">
+                {partner.tag}
+              </span>
             </div>
           ))}
         </div>

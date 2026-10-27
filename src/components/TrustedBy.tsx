@@ -1,46 +1,38 @@
-const TrustedBy = () => {
-  const partners = [
-    { name: "AMUL", logo: "AMUL" },
-    { name: "Al Ain Farms", logo: "Al Ain" },
-    { name: "Barakat", logo: "Barakat" },
-    { name: "Lacnor", logo: "Lacnor" },
-    { name: "Al Rawabi", logo: "Al Rawabi" },
-  ];
+import SectionHeading from "@/components/SectionHeading";
 
+const partners = [
+  { name: "AMUL", tag: "Dairy · India" },
+  { name: "Al Ain Farms", tag: "Dairy · UAE" },
+  { name: "Barakat", tag: "Juices · UAE" },
+  { name: "Lacnor", tag: "Beverages · GCC" },
+  { name: "Al Rawabi", tag: "Dairy · UAE" },
+];
+
+const TrustedBy = () => {
   return (
-    <section className="py-14 bg-secondary">
+    <section className="py-14 md:py-16 bg-secondary">
       <div className="container mx-auto px-4 lg:px-8">
-        {/* Header */}
-        <div className="text-center mb-12 animate-fade-in">
-          <div className="inline-flex items-center gap-2 bg-primary/10 rounded-full px-6 py-2 mb-4">
-            <span className="text-primary font-semibold text-sm tracking-wide uppercase">
-              Trusted Partners
-            </span>
-          </div>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-foreground">
-            Powering Global Brands
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Leading food & beverage companies trust us for their packaging excellence
-          </p>
-        </div>
-        
-        {/* Partners Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 md:gap-8">
-          {partners.map((partner, index) => (
+        <SectionHeading
+          eyebrow="Trusted Partners"
+          title="Powering Global Brands"
+          subtitle="Leading food & beverage companies trust us for their packaging excellence"
+        />
+
+        {/* Hairline partner grid */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-px bg-border rounded-2xl overflow-hidden shadow-sm animate-fade-in">
+          {partners.map((partner) => (
             <div
               key={partner.name}
-              className="group relative backdrop-blur-sm bg-white/80 rounded-2xl p-6 border-2 border-primary/10 hover:border-primary/30 shadow-lg hover:shadow-xl hover:shadow-primary/10 transition-all duration-300 hover:-translate-y-1 animate-fade-in"
-              style={{ animationDelay: `${index * 0.1}s` }}
+              className="group relative bg-card px-6 py-10 flex flex-col items-center justify-center text-center transition-colors duration-300 hover:bg-background"
             >
-              {/* Gradient Glow on Hover */}
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
-              
-              <div className="text-center">
-                <div className="text-2xl md:text-3xl font-extrabold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent group-hover:scale-105 transition-transform duration-300">
-                  {partner.logo}
-                </div>
-              </div>
+              {/* Top accent bar on hover */}
+              <span className="absolute top-0 left-0 right-0 h-0.5 bg-primary origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out" />
+              <span className="text-xl md:text-2xl font-bold text-muted-foreground group-hover:text-foreground tracking-tight transition-colors duration-300">
+                {partner.name}
+              </span>
+              <span className="mt-2 text-[11px] md:text-xs text-muted-foreground/70 tracking-wide uppercase">
+                {partner.tag}
+              </span>
             </div>
           ))}
         </div>

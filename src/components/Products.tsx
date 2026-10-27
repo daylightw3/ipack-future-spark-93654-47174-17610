@@ -1,93 +1,127 @@
-import { Card, CardContent } from "@/components/ui/card";
 import productPortfolio from "@/assets/products-portfolio.png";
 import productDesigns from "@/assets/product-designs.png";
 import productMaterials from "@/assets/product-materials.jpg";
-import productJuice from "@/assets/products-juice.jpg";
-const Products = () => {
-  const products = [{
+import SectionHeading from "@/components/SectionHeading";
+
+const highlights = [
+  {
     title: "Design Flexibility",
     image: productDesigns,
-    description: "1000+ vibrant design possibilities with advanced printing technology"
-  }, {
+    description:
+      "1000+ vibrant design possibilities with advanced printing technology",
+  },
+  {
     title: "Advanced Materials",
     image: productMaterials,
-    description: "Multi-layer technology ensuring product safety and freshness"
-  }];
-  const formats = [{
-    name: "IBA-Slim",
-    size: "180ml - 1000ml"
-  }, {
-    name: "IBA-Base",
-    size: "125ml - 1000ml"
-  }, {
-    name: "IBA-Square",
-    size: "180ml - 1000ml"
-  }, {
-    name: "ICA-Classic",
-    size: "200ml - 1000ml"
-  }, {
-    name: "ILA-Leaf",
-    size: "180ml - 1000ml"
-  }, {
-    name: "IFA-Fino",
-    size: "125ml - 250ml"
-  }];
-  return <section id="products" className="py-14 bg-gradient-to-b from-secondary via-secondary to-background">
+    description:
+      "Multi-layer technology ensuring product safety and freshness",
+  },
+];
+
+const formats = [
+  { name: "IBA-Slim", size: "180ml – 1000ml" },
+  { name: "IBA-Base", size: "125ml – 1000ml" },
+  { name: "IBA-Square", size: "180ml – 1000ml" },
+  { name: "ICA-Classic", size: "200ml – 1000ml" },
+  { name: "ILA-Leaf", size: "180ml – 1000ml" },
+  { name: "IFA-Fino", size: "125ml – 250ml" },
+];
+
+const Products = () => {
+  return (
+    <section
+      id="products"
+      className="py-14 md:py-16 bg-gradient-to-b from-secondary via-secondary to-background"
+    >
       <div className="container mx-auto px-4 lg:px-8">
-        {/* Header */}
-        <div className="text-center mb-12 animate-fade-in">
-          
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-foreground">
-            Flexible and Customizable Packaging Solutions
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-3xl mx-auto mb-6">
-            Innovative packaging designed to meet your unique needs
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-base font-semibold">
-            <span className="flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full border border-primary/20">
-              <span className="w-3 h-3 bg-primary rounded-full animate-pulse"></span>
-              10 Different Sizes
-            </span>
-            <span className="flex items-center gap-2 px-4 py-2 bg-accent/10 rounded-full border border-accent/20">
-              <span className="w-3 h-3 bg-accent rounded-full animate-pulse"></span>
-              1000+ Design Possibilities
-            </span>
+        <SectionHeading
+          title="Flexible and Customizable Packaging Solutions"
+          subtitle="Innovative packaging designed to meet your unique needs"
+        />
+
+        {/* Key facts */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10 text-sm font-semibold animate-fade-in">
+          <span className="flex items-center gap-2 px-5 py-2 rounded-full border border-primary/25 bg-primary/5 text-primary">
+            <span className="w-2 h-2 bg-primary rounded-full" />
+            10 Different Sizes
+          </span>
+          <span className="flex items-center gap-2 px-5 py-2 rounded-full border border-accent/30 bg-accent/10 text-accent-foreground">
+            <span className="w-2 h-2 bg-accent rounded-full" />
+            1000+ Design Possibilities
+          </span>
+        </div>
+
+        {/* Portfolio */}
+        <div className="mb-10 animate-scale-in">
+          <div className="rounded-2xl overflow-hidden shadow-lg border border-border">
+            <img
+              src={productPortfolio}
+              alt="ipack Product Portfolio – Complete Range"
+              className="w-full h-auto"
+            />
           </div>
         </div>
 
-        {/* Hero Portfolio Image */}
-        <div className="mb-12 animate-scale-in">
-          <div className="rounded-3xl overflow-hidden shadow-2xl">
-            <img src={productPortfolio} alt="ipack Product Portfolio - Complete Range" className="w-full h-auto" />
-          </div>
-        </div>
-
-        {/* Product Grid */}
-        <div className="grid md:grid-cols-2 gap-8 mb-14 max-w-5xl mx-auto">
-          {products.map((product, index) => <div key={product.title} className="group relative animate-scale-in" style={{
-          animationDelay: `${index * 0.1}s`
-        }}>
-              <Card className="overflow-hidden backdrop-blur-sm bg-white/90 border-2 border-primary/10 hover:border-primary/30 shadow-lg hover:shadow-2xl hover:shadow-primary/10 transition-all duration-500 hover:-translate-y-2">
-                {/* Gradient Glow Effect */}
-                <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary/10 to-accent/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl -z-10" />
-                
-                <div className="aspect-square overflow-hidden relative">
-                  <img src={product.image} alt={product.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        {/* Highlights */}
+        <div className="grid md:grid-cols-2 gap-6 md:gap-8 mb-12 max-w-5xl mx-auto">
+          {highlights.map((product, index) => (
+            <div
+              key={product.title}
+              className="group animate-scale-in"
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
+              <div className="h-full bg-card rounded-2xl overflow-hidden border border-border shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                <div className="aspect-[4/3] overflow-hidden">
+                  <img
+                    src={product.image}
+                    alt={product.title}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
                 </div>
-                <CardContent className="p-6">
-                  <h3 className="text-xl md:text-2xl font-bold mb-3 text-foreground group-hover:text-primary transition-colors">
+                <div className="p-6">
+                  <h3 className="text-lg md:text-xl font-bold mb-2 text-foreground">
                     {product.title}
                   </h3>
-                  <p className="text-muted-foreground leading-relaxed">{product.description}</p>
-                </CardContent>
-              </Card>
-            </div>)}
+                  <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+                    {product.description}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* Package Formats */}
-        
+        <div className="max-w-5xl mx-auto">
+          <div className="flex items-end justify-between mb-6">
+            <div>
+              <h3 className="text-xl md:text-2xl font-bold text-foreground">
+                Package Formats
+              </h3>
+              <p className="text-sm text-muted-foreground mt-1">
+                A format for every product and shelf
+              </p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-border rounded-xl overflow-hidden border border-border">
+            {formats.map((format) => (
+              <div
+                key={format.name}
+                className="group flex items-center justify-between bg-card px-6 py-5 transition-colors duration-300 hover:bg-background"
+              >
+                <span className="font-semibold text-foreground text-sm md:text-base">
+                  {format.name}
+                </span>
+                <span className="text-xs md:text-sm text-muted-foreground tabular-nums">
+                  {format.size}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
-    </section>;
+    </section>
+  );
 };
+
 export default Products;
