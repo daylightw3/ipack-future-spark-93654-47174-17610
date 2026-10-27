@@ -63,7 +63,7 @@ const Footer = () => {
             <div className="space-y-5">
               <div className="flex items-start gap-4">
                 <span className="w-10 h-10 rounded-lg bg-primary-foreground/5 border border-primary-foreground/10 flex items-center justify-center flex-shrink-0">
-                  <MapPin className="w-4.5 h-4.5 text-accent" />
+                  <MapPin className="w-5 h-5 text-accent" />
                 </span>
                 <div>
                   <p className="font-semibold mb-0.5 text-sm">Address</p>
@@ -75,7 +75,7 @@ const Footer = () => {
 
               <div className="flex items-start gap-4">
                 <span className="w-10 h-10 rounded-lg bg-primary-foreground/5 border border-primary-foreground/10 flex items-center justify-center flex-shrink-0">
-                  <Phone className="w-4.5 h-4.5 text-accent" />
+                  <Phone className="w-5 h-5 text-accent" />
                 </span>
                 <div>
                   <p className="font-semibold mb-0.5 text-sm">Phone</p>
@@ -87,7 +87,7 @@ const Footer = () => {
 
               <div className="flex items-start gap-4">
                 <span className="w-10 h-10 rounded-lg bg-primary-foreground/5 border border-primary-foreground/10 flex items-center justify-center flex-shrink-0">
-                  <Mail className="w-4.5 h-4.5 text-accent" />
+                  <Mail className="w-5 h-5 text-accent" />
                 </span>
                 <div>
                   <p className="font-semibold mb-0.5 text-sm">Email</p>
